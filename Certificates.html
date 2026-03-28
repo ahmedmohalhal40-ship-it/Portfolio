@@ -52,7 +52,6 @@
             font-size: 1.5rem;
         }
 
-        /* Grid System */
         .cert-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -94,7 +93,6 @@
             color: #888;
         }
 
-        /* Modal Preview */
         .modal {
             display: none;
             position: fixed;
@@ -197,10 +195,15 @@
         const modal = document.getElementById('certModal');
         const iframe = document.getElementById('certFrame');
         
-        // encodeURI عشان يتعامل مع المسافات والأقواس واللغة العربية في المسار صح
-        const encodedPath = encodeURI(path);
+        // الحصول على رابط الموقع الحالي (GitHub Pages URL)
+        const currentUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
         
-        iframe.src = encodedPath + "#toolbar=0&navpanes=0";
+        // بناء الرابط الكامل للملف وعمل Encoding له
+        const fullPath = currentUrl + encodeURI(path);
+        
+        // استخدام Google Drive Viewer لعرض الملف Preview دون تحميل
+        iframe.src = "https://docs.google.com/viewer?url=" + fullPath + "&embedded=true";
+        
         modal.style.display = "block";
         document.body.style.overflow = "hidden";
     }
@@ -218,7 +221,7 @@
     }
     </script>
 
-    <footer>
+    <footer style="text-align: center; padding: 2rem; color: #888;">
         &copy; 2026 Ahmed Mohalhal | Accounting & Automation Portfolio
     </footer>
 
