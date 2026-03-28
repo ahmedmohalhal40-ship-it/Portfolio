@@ -93,6 +93,7 @@
             color: #888;
         }
 
+        /* ===== Modal ===== */
         .modal {
             display: none;
             position: fixed;
@@ -100,28 +101,109 @@
             left: 0; top: 0;
             width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
+            overflow: hidden;
         }
 
         .modal-content {
             position: relative;
-            background: white;
+            background: #525659;
             margin: 2% auto;
-            width: 85%; height: 90%;
+            width: 85%;
+            height: 90%;
             border-radius: 8px;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 10px; right: 20px;
-            color: white; font-size: 30px;
-            cursor: pointer; z-index: 1001;
+        /* ===== Toolbar ===== */
+        .pdf-toolbar {
+            background: #323639;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            flex-shrink: 0;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        iframe { width: 100%; height: 100%; border: none; }
+        .pdf-toolbar-left, .pdf-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-toolbar button {
+            background: #525659;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .pdf-toolbar button:hover { background: #6a6e71; }
+        .pdf-toolbar button:disabled { opacity: 0.4; cursor: default; }
+
+        .pdf-toolbar span {
+            font-size: 13px;
+            color: #ccc;
+            white-space: nowrap;
+        }
+
+        .close-btn {
+            background: none !important;
+            font-size: 22px;
+            padding: 4px 10px !important;
+            color: #ccc;
+        }
+
+        /* ===== Canvas Viewer ===== */
+        .pdf-viewer {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            gap: 16px;
+        }
+
+        .pdf-viewer canvas {
+            display: block;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            background: white;
+            max-width: 100%;
+        }
+
+        /* Loading & Error */
+        .pdf-status {
+            color: #ccc;
+            font-size: 15px;
+            text-align: center;
+            margin: auto;
+            padding: 40px;
+        }
+
+        .pdf-status i {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
+        }
 
         @media (max-width: 600px) {
-            .modal-content { width: 95%; height: 80%; margin: 10% auto; }
+            .modal-content { width: 96%; height: 88%; margin: 6% auto; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -137,22 +219,19 @@
         
         <h2 class="section-header">General Certificates</h2>
         <div class="cert-grid">
-            <div class="cert-card" onclick="openCert('الشهادات/Principles of Finance.pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/Principles of Finance.pdf', 'Principles of Finance')">
                 <i class="fas fa-file-pdf"></i>
                 <div class="cert-info"><h3>Principles of Finance</h3><p>PDF Document</p></div>
             </div>
-
-            <div class="cert-card" onclick="openCert('الشهادات/Credit in Banks.pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/Credit in Banks.pdf', 'Credit in Banks')">
                 <i class="fas fa-file-pdf"></i>
                 <div class="cert-info"><h3>Credit in Banks</h3><p>PDF Document</p></div>
             </div>
-
-            <div class="cert-card" onclick="openCert('الشهادات/Banque Misr.pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/Banque Misr.pdf', 'Banque Misr')">
                 <i class="fas fa-file-pdf"></i>
                 <div class="cert-info"><h3>Banque Misr</h3><p>PDF Document</p></div>
             </div>
-
-            <div class="cert-card" onclick="openCert('الشهادات/Analysis of Profits & Losses Statement.pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/Analysis of Profits & Losses Statement.pdf', 'Analysis of Profits & Losses')">
                 <i class="fas fa-file-pdf"></i>
                 <div class="cert-info"><h3>Analysis of Profits & Losses</h3><p>PDF Document</p></div>
             </div>
@@ -160,22 +239,19 @@
 
         <h2 class="section-header">CIB Partnership (Learning & Development)</h2>
         <div class="cert-grid">
-            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate.pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate.pdf', 'L&D Certificate')">
                 <i class="fas fa-university"></i>
                 <div class="cert-info"><h3>L&D Certificate</h3><p>CIB Program</p></div>
             </div>
-
-            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (1).pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (1).pdf', 'L&D Part 1')">
                 <i class="fas fa-university"></i>
                 <div class="cert-info"><h3>L&D (Part 1)</h3><p>CIB Program</p></div>
             </div>
-
-            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (2).pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (2).pdf', 'L&D Part 2')">
                 <i class="fas fa-university"></i>
                 <div class="cert-info"><h3>L&D (Part 2)</h3><p>CIB Program</p></div>
             </div>
-
-            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (3).pdf')">
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (3).pdf', 'L&D Part 3')">
                 <i class="fas fa-university"></i>
                 <div class="cert-info"><h3>L&D (Part 3)</h3><p>CIB Program</p></div>
             </div>
@@ -183,46 +259,163 @@
 
     </div>
 
+    <!-- Modal -->
     <div id="certModal" class="modal">
-        <span class="close-btn" onclick="closeCert()">&times;</span>
         <div class="modal-content">
-            <iframe id="certFrame" src=""></iframe>
+            <!-- Toolbar -->
+            <div class="pdf-toolbar">
+                <div class="pdf-toolbar-left">
+                    <button id="btn-prev" onclick="changePage(-1)" title="Previous page"><i class="fas fa-chevron-left"></i></button>
+                    <span id="page-info">Page 1 / 1</span>
+                    <button id="btn-next" onclick="changePage(1)" title="Next page"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="pdf-toolbar-right">
+                    <button onclick="changeZoom(-0.25)" title="Zoom out"><i class="fas fa-search-minus"></i></button>
+                    <span id="zoom-info">100%</span>
+                    <button onclick="changeZoom(0.25)" title="Zoom in"><i class="fas fa-search-plus"></i></button>
+                    <button onclick="downloadCurrent()" title="Download"><i class="fas fa-download"></i></button>
+                    <button class="close-btn" onclick="closeCert()" title="Close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <!-- PDF Canvas Area -->
+            <div class="pdf-viewer" id="pdf-viewer">
+                <div class="pdf-status" id="pdf-status">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Loading certificate...
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- PDF.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-    function openCert(path) {
-        const modal = document.getElementById('certModal');
-        const iframe = document.getElementById('certFrame');
-        
-        // الحصول على رابط الموقع الحالي (GitHub Pages URL)
-        const currentUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-        
-        // بناء الرابط الكامل للملف وعمل Encoding له
-        const fullPath = currentUrl + encodeURI(path);
-        
-        // استخدام Google Drive Viewer لعرض الملف Preview دون تحميل
-        iframe.src = "https://docs.google.com/viewer?url=" + fullPath + "&embedded=true";
-        
-        modal.style.display = "block";
-        document.body.style.overflow = "hidden";
-    }
+        // Set worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    function closeCert() {
-        const modal = document.getElementById('certModal');
-        document.getElementById('certFrame').src = "";
-        modal.style.display = "none";
-        document.body.style.overflow = "auto";
-    }
+        let pdfDoc    = null;
+        let currentPage = 1;
+        let totalPages  = 1;
+        let scale       = 1.4;
+        let currentPath = '';
+        let renderTask  = null;
 
-    window.onclick = function(event) {
-        const modal = document.getElementById('certModal');
-        if (event.target == modal) closeCert();
-    }
+        // ─── Open ───────────────────────────────────────────────
+        async function openCert(path, title) {
+            currentPath = path;
+            currentPage = 1;
+            scale       = 1.4;
+
+            const modal  = document.getElementById('certModal');
+            const viewer = document.getElementById('pdf-viewer');
+            const status = document.getElementById('pdf-status');
+
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            // Show loading
+            viewer.innerHTML = '';
+            status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading certificate...';
+            viewer.appendChild(status);
+
+            try {
+                const encoded = encodeURI(path);
+                const loadingTask = pdfjsLib.getDocument(encoded);
+                pdfDoc = await loadingTask.promise;
+
+                totalPages = pdfDoc.numPages;
+                updateToolbar();
+
+                // Render all pages
+                viewer.innerHTML = '';
+                for (let p = 1; p <= totalPages; p++) {
+                    await renderPage(p, viewer);
+                }
+
+            } catch (err) {
+                console.error(err);
+                viewer.innerHTML = `
+                    <div class="pdf-status">
+                        <i class="fas fa-exclamation-circle" style="color:#e74c3c"></i>
+                        Could not load the certificate.<br>
+                        <small style="opacity:.7">${err.message}</small>
+                    </div>`;
+            }
+        }
+
+        // ─── Render a single page into a canvas ─────────────────
+        async function renderPage(pageNum, container) {
+            const page     = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale });
+
+            const canvas  = document.createElement('canvas');
+            canvas.width  = viewport.width;
+            canvas.height = viewport.height;
+            canvas.id     = `page-canvas-${pageNum}`;
+            container.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            await page.render({ canvasContext: ctx, viewport }).promise;
+        }
+
+        // ─── Page navigation (scroll to page) ───────────────────
+        function changePage(delta) {
+            const target = currentPage + delta;
+            if (target < 1 || target > totalPages) return;
+            currentPage = target;
+            updateToolbar();
+            const canvas = document.getElementById(`page-canvas-${currentPage}`);
+            if (canvas) canvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ─── Zoom ────────────────────────────────────────────────
+        async function changeZoom(delta) {
+            scale = Math.min(3, Math.max(0.5, scale + delta));
+            updateToolbar();
+
+            const viewer = document.getElementById('pdf-viewer');
+            viewer.innerHTML = '<div class="pdf-status"><i class="fas fa-spinner fa-spin"></i> Adjusting zoom...</div>';
+
+            for (let p = 1; p <= totalPages; p++) {
+                await renderPage(p, viewer);
+            }
+        }
+
+        // ─── Toolbar labels ──────────────────────────────────────
+        function updateToolbar() {
+            document.getElementById('page-info').textContent  = `Page ${currentPage} / ${totalPages}`;
+            document.getElementById('zoom-info').textContent  = Math.round(scale * 100 / 1.4 * 100) + '%';
+            document.getElementById('btn-prev').disabled = currentPage <= 1;
+            document.getElementById('btn-next').disabled = currentPage >= totalPages;
+        }
+
+        // ─── Download ────────────────────────────────────────────
+        function downloadCurrent() {
+            const a = document.createElement('a');
+            a.href     = encodeURI(currentPath);
+            a.download = currentPath.split('/').pop();
+            a.click();
+        }
+
+        // ─── Close ───────────────────────────────────────────────
+        function closeCert() {
+            document.getElementById('certModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('pdf-viewer').innerHTML = '';
+            pdfDoc = null;
+        }
+
+        // Close on outside click
+        window.onclick = function(e) {
+            const modal = document.getElementById('certModal');
+            if (e.target === modal) closeCert();
+        };
     </script>
 
-    <footer style="text-align: center; padding: 2rem; color: #888;">
-        &copy; 2026 Ahmed Mohalhal Portfolio
+    <footer>
+        &copy; 2026 Ahmed Mohalhal | Accounting & Automation Portfolio
     </footer>
 
 </body>
