@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates | Ahmed Mohalhal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a2a6c;
+            --secondary-color: #f4f7f6;
+            --accent-color: #007bff;
+            --text-dark: #333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+        }
+
+        header {
+            background: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin: 3rem 0 1.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Grid for Cards */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .cert-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .cert-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .cert-card span {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            word-break: break-word;
+        }
+
+        /* Modal Structure (The Previewer) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 2% auto;
+            width: 80%;
+            height: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer { text-align: center; padding: 40px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        <h1>Professional Certificates</h1>
+        <p>Click on any certificate to preview</p>
+    </header>
+
+    <div class="container">
+        
+        <h2 class="section-header">CIB Partnership Certificates</h2>
+        <div class="cert-grid">
+            <div class="cert-card" onclick="openPreview('الشهادات/CIB/Banking_Essentials.pdf')">
+                <i class="fas fa-university"></i>
+                <span>Banking Essentials</span>
+            </div>
+            
+            <div class="cert-card" onclick="openPreview('الشهادات/CIB/Digital_Transformation.pdf')">
+                <i class="fas fa-university"></i>
+                <span>Digital Transformation</span>
+            </div>
+        </div>
+
+        <h2 class="section-header">General Certificates</h2>
+        <div class="cert-grid">
+            <div class="cert-card" onclick="openPreview('الشهادات/ICDL_Certificate.pdf')">
+                <i class="fas fa-certificate"></i>
+                <span>ICDL Certificate</span>
+            </div>
+            
+            <div class="cert-card" onclick="openPreview('الشهادات/Financial_Accounting.pdf')">
+                <i class="fas fa-certificate"></i>
+                <span>Financial Accounting</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="pdfModal" class="modal">
+        <span class="close-modal" onclick="closePreview()">&times;</span>
+        <div class="modal-content">
+            <iframe id="pdfFrame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openPreview(pdfPath) {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('pdfFrame');
+            // إضافة toolbar=0 لإخفاء أدوات التحميل والطباعة
+            iframe.src = pdfPath + "#toolbar=0";
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden"; // منع التمرير في الخلفية
+        }
+
+        function closePreview() {
+            const modal = document.getElementById('pdfModal');
+            const iframe = document.getElementById('pdfFrame');
+            modal.style.display = "none";
+            iframe.src = "";
+            document.body.style.overflow = "auto";
+        }
+
+        // إغلاق النافذة عند الضغط خارجها
+        window.onclick = function(event) {
+            const modal = document.getElementById('pdfModal');
+            if (event.target == modal) {
+                closePreview();
+            }
+        }
+    </script>
+
+    <footer>
+        &copy; 2026 Ahmed Mohalhal
+    </footer>
+
+</body>
+</html>
