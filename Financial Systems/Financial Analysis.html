@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analysis Dashboard | لوحة التحليل المالي</title>
+<style>
+    .whatsapp-floating {
+        position: fixed;
+        top: 10px;              /* أعلى الصفحة */
+        left: 10px;             /* في اليسار حتى لا يحجب شريط العنوان */
+        z-index: 9999;
+        background-color: #25D366;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        opacity: 0.9;           /* شفافية بسيطة حتى لا يحجب المحتوى */
+    }
+
+    .whatsapp-floating:hover {
+        opacity: 1;
+        transform: translateY(-1px);
+    }
+
+    .whatsapp-icon {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        background-color: #fff;
+        border-radius: 50%;
+        position: relative;
+    }
+
+    .whatsapp-icon::before {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        background-color: #25D366;
+    }
+    :root {
+        --primary-color: #D4428B;
+        --secondary-color: #D442D4;
+        --tertiary-color: #8B42D4;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --dark-bg-1: #4F9CC2;
+        --dark-bg-2: #536D99;
+        --dark-bg-3: #5D86C2;
+        --light-text: #f1f5f9;
+        --border-color: #475569;
+        --glow-color: rgba(212, 66, 139, 0.4);
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        --shadow-glow: 0 0 20px var(--glow-color);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+    }
+
+    @keyframes glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(212, 66, 139, 0.3), 0 0 40px rgba(212, 66, 212, 0.2); }
+        50% { box-shadow: 0 0 30px rgba(212, 66, 139, 0.5), 0 0 60px rgba(139, 66, 212, 0.3); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    body {
+        padding-bottom: 70px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(-45deg, #0f172a, #1e293b, #2d1b4e, #3d1e4a);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        color: var(--light-text);
+        line-height: 1.6;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(212, 66, 139, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(139, 66, 212, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 50% 20%, rgba(212, 66, 212, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    header {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: var(--shadow), 0 0 40px rgba(212, 66, 139, 0.2);
+        margin-bottom: 30px;
+        text-align: center;
+        border: 1px solid rgba(212, 66, 139, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 66, 139, 0.2), transparent);
+        animation: shimmer 3s infinite;
+    }
+
+    h1 {
+        background: linear-gradient(135deg, #D4428B, #D442D4, #8B42D4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+        filter: drop-shadow(0 0 30px rgba(212, 66, 139, 0.5));
+    }
+
+    .subtitle {
+        color: #94a3b8;
+        font-size: 1.1em;
+    }
+
+    .language-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #D4428B, #D442D4);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(212, 66, 139, 0.5);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .language-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(212, 66, 139, 0.7);
+        background: linear-gradient(135deg, #D442D4, #8B42D4);
+    }
+
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.9));
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        flex-wrap: wrap;
+        border: 1px solid rgba(212, 66, 139, 0.2);
+    }
+
+    .tab-btn {
+        padding: 12px 24px;
+        border: 2px solid rgba(212, 66, 139, 0.3);
+        background: rgba(51, 65, 85, 0.5);
+        color: var(--light-text);
+        cursor: pointer;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tab-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 66, 139, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .tab-btn:hover::before {
+        left: 100%;
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, #D4428B, #D442D4, #8B42D4);
+        color: white;
+        border-color: #D4428B;
+        box-shadow: 0 0 25px rgba(212, 66, 139, 0.6), 0 0 50px rgba(139, 66, 212, 0.3);
+    }
+
+    .tab-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(212, 66, 139, 0.4);
+        border-color: #D4428B;
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .income-statement {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow), 0 0 30px rgba(212, 66, 139, 0.15);
+        border: 1px solid rgba(212, 66, 139, 0.2);
+    }
+
+    .statement-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .statement-table thead {
+        background: linear-gradient(135deg, #D4428B, #D442D4, #8B42D4);
+        position: relative;
+    }
+
+    .statement-table thead::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .statement-table th {
+        padding: 15px;
+        text-align: right;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .statement-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(212, 66, 139, 0.1);
+        color: var(--light-text);
+    }
+
+    .statement-table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .statement-table tbody tr:hover {
+        background: linear-gradient(90deg, rgba(212, 66, 139, 0.1), rgba(139, 66, 212, 0.1));
+        transform: scale(1.01);
+    }
+
+    .statement-table tbody tr.highlight {
+        background: linear-gradient(90deg, rgba(212, 66, 139, 0.2), rgba(212, 66, 212, 0.2));
+        font-weight: 600;
+        box-shadow: inset 0 0 20px rgba(212, 66, 139, 0.2);
+    }
+
+    .amount-value {
+        color: #fbbf24;
+        font-weight: 600;
+        font-family: 'Courier New', monospace;
+        text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+
+    .percentage {
+        color: #D442D4;
+        font-weight: 500;
+        text-shadow: 0 0 10px rgba(212, 66, 212, 0.5);
+    }
+
+    .ratios-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .ratio-category {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        border-right: 4px solid;
+        border-image: linear-gradient(180deg, #D4428B, #D442D4, #8B42D4) 1;
+        border-left: 1px solid rgba(212, 66, 139, 0.2);
+        border-top: 1px solid rgba(212, 66, 139, 0.2);
+        border-bottom: 1px solid rgba(212, 66, 139, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ratio-category::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(212, 66, 139, 0.15) 0%, transparent 70%);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .ratio-category:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow), 0 0 40px rgba(212, 66, 139, 0.4), 0 0 60px rgba(139, 66, 212, 0.2);
+        animation: glow 2s ease-in-out infinite;
+    }
+
+    .ratio-category h3 {
+        background: linear-gradient(135deg, #D4428B, #D442D4, #8B42D4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        position: relative;
+        z-index: 1;
+        filter: drop-shadow(0 0 10px rgba(212, 66, 139, 0.3));
+    }
+
+    .ratio-item {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(212, 66, 139, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .ratio-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .ratio-name {
+        font-weight: 600;
+        color: var(--light-text);
+        margin-bottom: 8px;
+        font-size: 0.95em;
+    }
+
+    .ratio-formula {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        color: #94a3b8;
+        font-family: 'Courier New', monospace;
+        margin-bottom: 8px;
+        border: 1px solid rgba(212, 66, 139, 0.2);
+    }
+
+    .ratio-value {
+        font-size: 1.4em;
+        font-weight: bold;
+        background: linear-gradient(135deg, #10b981, #34d399, #6ee7b7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-family: 'Courier New', monospace;
+        filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.5));
+    }
+
+    .data-input {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(212, 66, 139, 0.2);
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .form-section h3 {
+        background: linear-gradient(135deg, #D4428B, #D442D4, #8B42D4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        border-bottom: 2px solid rgba(212, 66, 139, 0.3);
+        padding-bottom: 10px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: var(--light-text);
+        margin-bottom: 8px;
+        font-size: 0.95em;
+    }
+
+    .form-group label .en {
+        display: block;
+        font-size: 0.85em;
+        color: #94a3b8;
+        font-weight: 400;
+        margin-top: 2px;
+    }
+
+    .form-group input {
+        padding: 12px;
+        border: 1px solid rgba(212, 66, 139, 0.3);
+        background: rgba(15, 23, 42, 0.6);
+        color: var(--light-text);
+        border-radius: 8px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #D4428B;
+        box-shadow: 0 0 0 3px rgba(212, 66, 139, 0.2), 0 0 25px rgba(212, 66, 139, 0.4);
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .form-group input:disabled {
+        background: rgba(51, 65, 85, 0.5);
+        color: #64748b;
+        cursor: not-allowed;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #D4428B, #D442D4);
+        color: white;
+        box-shadow: 0 4px 15px rgba(212, 66, 139, 0.5);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 30px rgba(212, 66, 139, 0.7), 0 0 40px rgba(212, 66, 212, 0.3);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #D442D4, #8B42D4);
+        color: white;
+        box-shadow: 0 4px 15px rgba(139, 66, 212, 0.5);
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 30px rgba(139, 66, 212, 0.7), 0 0 40px rgba(212, 66, 212, 0.3);
+    }
+
+    .alert {
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: none;
+        backdrop-filter: blur(10px);
+    }
+
+    .alert.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .alert-success {
+        background: rgba(16, 185, 129, 0.2);
+        color: #6ee7b7;
+        border-left: 4px solid var(--success-color);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .alert-info {
+        background: rgba(212, 66, 139, 0.2);
+        color: #fbbf24;
+        border-left: 4px solid #D4428B;
+        box-shadow: 0 4px 15px rgba(212, 66, 139, 0.3);
+    }
+
+    .comparative {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        padding: 25px;
+        border: 1px solid rgba(212, 66, 139, 0.2);
+    }
+
+    .comparative-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .comparative-table thead {
+        background: linear-gradient(135deg, #8B42D4, #D442D4);
+        color: white;
+    }
+
+    .comparative-table th {
+        padding: 15px;
+        text-align: center;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .comparative-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(212, 66, 139, 0.1);
+        text-align: center;
+        color: var(--light-text);
+    }
+
+    .comparative-table td input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid rgba(212, 66, 139, 0.3);
+        background: rgba(15, 23, 42, 0.6);
+        color: var(--light-text);
+        border-radius: 6px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .comparative-table td input:focus {
+        border-color: #D4428B;
+        box-shadow: 0 0 15px rgba(212, 66, 139, 0.4);
+    }
+
+    .positive-change {
+        color: #34d399;
+        font-weight: 600;
+        text-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+    }
+
+    .negative-change {
+        color: #f87171;
+        font-weight: 600;
+        text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+    }
+
+    .year-inputs {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .year-inputs .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .dupont-box {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        border: 1px solid rgba(212, 66, 139, 0.2);
+    }
+
+    .dupont-formula {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .dupont-component {
+        background: linear-gradient(135deg, #D4428B, #D442D4, #8B42D4);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(212, 66, 139, 0.4);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dupont-component::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+    }
+
+    .dupont-component:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 8px 35px rgba(212, 66, 139, 0.6), 0 0 50px rgba(139, 66, 212, 0.4);
+    }
+
+    .dupont-component-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .dupont-component-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .mode-toggle {
+        background: linear-gradient(135deg, rgba(212, 66, 139, 0.2), rgba(139, 66, 212, 0.2));
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-right: 4px solid #D4428B;
+        border: 1px solid rgba(212, 66, 139, 0.3);
+    }
+
+    .mode-toggle label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--light-text);
+    }
+
+    .mode-toggle input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #D4428B;
+    }
+
+    .footer {
+        text-align: center;
+        color: #94a3b8;
+        margin-top: 30px;
+        padding: 20px;
+        opacity: 0.9;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.8em;
+        }
+
+        .tabs {
+            flex-direction: column;
+        }
+
+        .tab-btn {
+            width: 100%;
+        }
+
+        .ratios-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .statement-table th,
+        .statement-table td {
+            padding: 10px 8px;
+            font-size: 0.9em;
+        }
+    }
+      </style>
+</head>
+<body>
+<a href="https://wa.me/201119859192" class="whatsapp-floating" target="_blank">
+    <img src="https://i.pinimg.com/736x/c6/09/0d/c6090df18193e2616a6a32076883b70c.jpg"
+         alt="WhatsApp"
+         style="width:18px; height:18px; border-radius:50%; object-fit:cover;">
+    <span>للتواصل</span>
+</a>
+    <button class="language-toggle" onclick="toggleLanguage()">English</button>
+    
+    <div class="container">
+        <header>
+            <h1 id="title">لوحة التحليل المالي</h1>
+            <p class="subtitle" id="subtitle">منصة شاملة لتحليل البيانات المالية</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('income-statement')">
+                <span class="ar">قائمة الدخل</span>
+                <span class="en" style="display:none;">Income Statement</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('ratios')">
+                <span class="ar">النسب المالية</span>
+                <span class="en" style="display:none;">Financial Ratios</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('comparative')">
+                <span class="ar">المقارنة السنوية</span>
+                <span class="en" style="display:none;">Comparative Analysis</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('dupont')">
+                <span class="ar">تحليل DuPont</span>
+                <span class="en" style="display:none;">DuPont Analysis</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('data-input')">
+                <span class="ar">إدخال البيانات</span>
+                <span class="en" style="display:none;">Data Input</span>
+            </button>
+        </div>
+
+        <!-- Income Statement Tab -->
+        <div id="income-statement" class="tab-content active">
+            <div class="income-statement">
+                <table class="statement-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">
+                                <span class="ar">البيان</span>
+                                <span class="en" style="display:none;">Statement</span>
+                            </th>
+                            <th style="width: 30%;">
+                                <span class="ar">القيمة</span>
+                                <span class="en" style="display:none;">Amount</span>
+                            </th>
+                            <th style="width: 30%;">
+                                <span class="ar">النسبة %</span>
+                                <span class="en" style="display:none;">% of Sales</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="income-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Financial Ratios Tab -->
+        <div id="ratios" class="tab-content">
+            <h2 style="color: white; margin-bottom: 20px;">
+                <span class="ar">النسب المالية الرئيسية</span>
+                <span class="en" style="display:none;">Key Financial Ratios</span>
+            </h2>
+            <div class="ratios-grid" id="ratios-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Comparative Analysis Tab -->
+        <div id="comparative" class="tab-content">
+            <div class="comparative">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">
+                    <span class="ar">التحليل المقارن بين السنوات</span>
+                    <span class="en" style="display:none;">Comparative Year-over-Year Analysis</span>
+                </h2>
+                
+                <div class="year-inputs">
+                    <div class="form-group">
+                        <label>
+                            <span class="ar">السنة الحالية</span>
+                            <span class="en" style="display:none;">Current Year</span>
+                        </label>
+                        <input type="number" id="year-current" value="2024">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="ar">السنة السابقة</span>
+                            <span class="en" style="display:none;">Previous Year</span>
+                        </label>
+                        <input type="number" id="year-previous" value="2023">
+                    </div>
+                </div>
+
+                <table class="comparative-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">
+                                <span class="ar">البيان</span>
+                                <span class="en" style="display:none;">Item</span>
+                            </th>
+                            <th>
+                                <span class="ar">السنة الحالية</span>
+                                <span class="en" style="display:none;">Current Year</span>
+                            </th>
+                            <th>
+                                <span class="ar">السنة السابقة</span>
+                                <span class="en" style="display:none;">Previous Year</span>
+                            </th>
+                            <th>
+                                <span class="ar">التغير المطلق</span>
+                                <span class="en" style="display:none;">Absolute Change</span>
+                            </th>
+                            <th>
+                                <span class="ar">التغير %</span>
+                                <span class="en" style="display:none;">% Change</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="ar">المبيعات</span><span class="en" style="display:none;">Sales Revenue</span></td>
+                            <td><input type="number" class="cy" data-key="sales" value="1000000"></td>
+                            <td><input type="number" class="py" data-key="sales" value="850000"></td>
+                            <td class="ac amount-value" data-key="sales">-</td>
+                            <td class="pc" data-key="sales">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="ar">تكلفة البضاعة المباعة</span><span class="en" style="display:none;">COGS</span></td>
+                            <td><input type="number" class="cy" data-key="cogs" value="600000"></td>
+                            <td><input type="number" class="py" data-key="cogs" value="510000"></td>
+                            <td class="ac amount-value" data-key="cogs">-</td>
+                            <td class="pc" data-key="cogs">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="ar">الربح الإجمالي</span><span class="en" style="display:none;">Gross Profit</span></td>
+                            <td><input type="number" class="cy" data-key="gp" value="400000"></td>
+                            <td><input type="number" class="py" data-key="gp" value="340000"></td>
+                            <td class="ac amount-value" data-key="gp">-</td>
+                            <td class="pc" data-key="gp">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="ar">المصروفات التشغيلية</span><span class="en" style="display:none;">Operating Expenses</span></td>
+                            <td><input type="number" class="cy" data-key="opex" value="140000"></td>
+                            <td><input type="number" class="py" data-key="opex" value="138000"></td>
+                            <td class="ac amount-value" data-key="opex">-</td>
+                            <td class="pc" data-key="opex">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="ar">الربح التشغيلي</span><span class="en" style="display:none;">Operating Income</span></td>
+                            <td><input type="number" class="cy" data-key="oi" value="260000"></td>
+                            <td><input type="number" class="py" data-key="oi" value="202000"></td>
+                            <td class="ac amount-value" data-key="oi">-</td>
+                            <td class="pc" data-key="oi">-</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td><span class="ar">صافي الدخل</span><span class="en" style="display:none;">Net Income</span></td>
+                            <td><input type="number" class="cy" data-key="ni" value="172500"></td>
+                            <td><input type="number" class="py" data-key="ni" value="125000"></td>
+                            <td class="ac amount-value" data-key="ni">-</td>
+                            <td class="pc" data-key="ni">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculateComparison()">
+                        <span class="ar">حساب المقارنة</span>
+                        <span class="en" style="display:none;">Calculate Comparison</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DuPont Analysis Tab -->
+        <div id="dupont" class="tab-content">
+            <div class="dupont-box" id="dupont-content">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Data Input Tab -->
+        <div id="data-input" class="tab-content">
+            <div class="data-input">
+                <div class="alert alert-success" id="alert-success">
+                    <span class="ar">تم تحديث البيانات بنجاح!</span>
+                    <span class="en" style="display:none;">Data updated successfully!</span>
+                </div>
+
+                <div class="alert alert-info" id="alert-info">
+                    <span class="ar">💡 الوضع المبسط: أدخل فقط المبيعات، التكلفة، وصافي الربح - وسيتم حساب باقي البنود تلقائياً</span>
+                    <span class="en" style="display:none;">💡 Simple Mode: Enter only Sales, COGS, and Net Income - other items will be calculated automatically</span>
+                </div>
+
+                <div class="mode-toggle">
+                    <label>
+                        <input type="checkbox" id="simple-mode" onchange="toggleInputMode()">
+                        <span class="ar">🎯 تفعيل الوضع المبسط (إدخال صافي الربح مباشرة)</span>
+                        <span class="en" style="display:none;">🎯 Enable Simple Mode (Direct Net Income Input)</span>
+                    </label>
+                </div>
+
+                <form onsubmit="updateData(event)">
+                    <div class="form-section">
+                        <h3>
+                            <span class="ar">بيانات قائمة الدخل</span>
+                            <span class="en" style="display:none;">Income Statement Data</span>
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">المبيعات *</span>
+                                    <span class="en" style="display:none;">Sales Revenue *</span>
+                                </label>
+                                <input type="number" id="sales" value="1000000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">تكلفة البضاعة المباعة *</span>
+                                    <span class="en" style="display:none;">Cost of Goods Sold *</span>
+                                </label>
+                                <input type="number" id="cogs" value="600000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">صافي الدخل (الوضع المبسط) *</span>
+                                    <span class="en" style="display:none;">Net Income (Simple Mode) *</span>
+                                </label>
+                                <input type="number" id="net-income-direct" value="172500" disabled>
+                            </div>
+                            <div class="form-group detail-input">
+                                <label>
+                                    <span class="ar">مصروفات البيع والتسويق</span>
+                                    <span class="en" style="display:none;">Selling & Marketing</span>
+                                </label>
+                                <input type="number" id="selling" value="80000">
+                            </div>
+                            <div class="form-group detail-input">
+                                <label>
+                                    <span class="ar">مصروفات إدارية</span>
+                                    <span class="en" style="display:none;">Administrative Expenses</span>
+                                </label>
+                                <input type="number" id="admin" value="60000">
+                            </div>
+                            <div class="form-group detail-input">
+                                <label>
+                                    <span class="ar">مصروفات الفائدة</span>
+                                    <span class="en" style="display:none;">Interest Expense</span>
+                                </label>
+                                <input type="number" id="interest" value="30000">
+                            </div>
+                            <div class="form-group detail-input">
+                                <label>
+                                    <span class="ar">الضريبة</span>
+                                    <span class="en" style="display:none;">Income Tax</span>
+                                </label>
+                                <input type="number" id="tax" value="57500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>
+                            <span class="ar">بيانات الميزانية العمومية</span>
+                            <span class="en" style="display:none;">Balance Sheet Data</span>
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">الأصول الجارية</span>
+                                    <span class="en" style="display:none;">Current Assets</span>
+                                </label>
+                                <input type="number" id="current-assets" value="490000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">الأصول غير الجارية</span>
+                                    <span class="en" style="display:none;">Non-Current Assets</span>
+                                </label>
+                                <input type="number" id="non-current-assets" value="710000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">الالتزامات الجارية</span>
+                                    <span class="en" style="display:none;">Current Liabilities</span>
+                                </label>
+                                <input type="number" id="current-liab" value="200000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">الالتزامات طويلة الأجل</span>
+                                    <span class="en" style="display:none;">Long-term Liabilities</span>
+                                </label>
+                                <input type="number" id="long-term-liab" value="300000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">المخزون</span>
+                                    <span class="en" style="display:none;">Inventory</span>
+                                </label>
+                                <input type="number" id="inventory" value="140000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <span class="ar">النقدية</span>
+                                    <span class="en" style="display:none;">Cash</span>
+                                </label>
+                                <input type="number" id="cash" value="200000" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="ar">تحديث البيانات</span>
+                            <span class="en" style="display:none;">Update Data</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <span class="ar">إعادة تعيين</span>
+                            <span class="en" style="display:none;">Reset</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+            <!-- Fixed Footer -->
+    <footer style="position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95)); backdrop-filter: blur(10px); padding: 15px 20px; text-align: center; border-top: 2px solid rgba(212, 66, 139, 0.3); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3); z-index: 1000;">
+        <p style="margin: 0; color: #94a3b8; font-size: 0.95em; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">
+            <span class="ar">إعداد الباحث/ أحمد محمد مهلهل 2025 | تمهيدي ماجستير محاسبة</span>
+            <span class="en" style="display:none;">Prepared by: Ahmed Mohamed Mohlahel 2025 | Pre-Master's in Accounting</span>
+        </p>
+    </footer>
+    </div>
+
+    <script>
+        let isEnglish = false;
+        let simpleMode = false;
+        let financialData = {
+            sales: 1000000,
+            cogs: 600000,
+            selling: 80000,
+            admin: 60000,
+            interest: 30000,
+            tax: 57500,
+            netIncome: 172500,
+            currentAssets: 490000,
+            nonCurrentAssets: 710000,
+            currentLiab: 200000,
+            longTermLiab: 300000,
+            inventory: 140000,
+            cash: 200000
+        };
+
+        function showTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            const htmlElement = document.documentElement;
+            const toggleBtn = document.querySelector('.language-toggle');
+
+            if (isEnglish) {
+                htmlElement.dir = 'ltr';
+                htmlElement.lang = 'en';
+                toggleBtn.textContent = 'العربية';
+            } else {
+                htmlElement.dir = 'rtl';
+                htmlElement.lang = 'ar';
+                toggleBtn.textContent = 'English';
+            }
+
+            document.querySelectorAll('.ar').forEach(el => {
+                el.style.display = isEnglish ? 'none' : 'inline';
+            });
+
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.display = isEnglish ? 'inline' : 'none';
+            });
+        }
+
+        function toggleInputMode() {
+            simpleMode = document.getElementById('simple-mode').checked;
+            const detailInputs = document.querySelectorAll('.detail-input input');
+            const netIncomeInput = document.getElementById('net-income-direct');
+            const alertInfo = document.getElementById('alert-info');
+
+            if (simpleMode) {
+                // Enable simple mode
+                detailInputs.forEach(input => {
+                    input.disabled = true;
+                    input.value = 0;
+                });
+                netIncomeInput.disabled = false;
+                netIncomeInput.required = true;
+                alertInfo.classList.add('show');
+            } else {
+                // Enable detailed mode
+                detailInputs.forEach(input => {
+                    input.disabled = false;
+                });
+                netIncomeInput.disabled = true;
+                netIncomeInput.required = false;
+                alertInfo.classList.remove('show');
+                
+                // Restore default values
+                document.getElementById('selling').value = 80000;
+                document.getElementById('admin').value = 60000;
+                document.getElementById('interest').value = 30000;
+                document.getElementById('tax').value = 57500;
+            }
+        }
+
+        function formatNumber(n) {
+            if (isNaN(n) || n === null) return "0";
+            return n.toLocaleString("en-US", { maximumFractionDigits: 2 });
+        }
+
+        function calculateFinancials() {
+            const sales = parseFloat(document.getElementById('sales').value) || 0;
+            const cogs = parseFloat(document.getElementById('cogs').value) || 0;
+            
+            let netIncome, selling, admin, interest, tax;
+            let grossProfit = sales - cogs;
+            
+            if (simpleMode) {
+                // Simple mode: Net Income is provided directly
+                netIncome = parseFloat(document.getElementById('net-income-direct').value) || 0;
+                
+                // Calculate implied operating expenses
+                const totalExpenses = grossProfit - netIncome;
+                selling = 0;
+                admin = 0;
+                interest = 0;
+                tax = 0;
+            } else {
+                // Detailed mode: Calculate from individual expenses
+                selling = parseFloat(document.getElementById('selling').value) || 0;
+                admin = parseFloat(document.getElementById('admin').value) || 0;
+                interest = parseFloat(document.getElementById('interest').value) || 0;
+                tax = parseFloat(document.getElementById('tax').value) || 0;
+                
+                const operatingExpenses = selling + admin;
+                const operatingIncome = grossProfit - operatingExpenses;
+                const ebt = operatingIncome - interest;
+                netIncome = ebt - tax;
+            }
+
+            financialData = {
+                sales,
+                cogs,
+                grossProfit,
+                selling,
+                admin,
+                operatingExpenses: selling + admin,
+                operatingIncome: grossProfit - (selling + admin),
+                interest,
+                tax,
+                netIncome,
+                currentAssets: parseFloat(document.getElementById('current-assets').value) || 0,
+                nonCurrentAssets: parseFloat(document.getElementById('non-current-assets').value) || 0,
+                currentLiab: parseFloat(document.getElementById('current-liab').value) || 0,
+                longTermLiab: parseFloat(document.getElementById('long-term-liab').value) || 0,
+                inventory: parseFloat(document.getElementById('inventory').value) || 0,
+                cash: parseFloat(document.getElementById('cash').value) || 0
+            };
+
+            financialData.totalAssets = financialData.currentAssets + financialData.nonCurrentAssets;
+            financialData.totalLiab = financialData.currentLiab + financialData.longTermLiab;
+            financialData.equity = financialData.totalAssets - financialData.totalLiab;
+
+            return financialData;
+        }
+
+        function renderIncomeStatement() {
+            const data = calculateFinancials();
+            const tbody = document.getElementById('income-table-body');
+            
+            const rows = [
+                { label: 'المبيعات', labelEn: 'Sales Revenue', value: data.sales, highlight: false },
+                { label: 'تكلفة البضاعة المباعة', labelEn: 'Cost of Goods Sold', value: data.cogs, highlight: false },
+                { label: 'الربح الإجمالي', labelEn: 'Gross Profit', value: data.grossProfit, highlight: true }
+            ];
+
+            if (!simpleMode) {
+                rows.push(
+                    { label: 'مصروفات البيع والتسويق', labelEn: 'Selling & Marketing', value: data.selling, highlight: false },
+                    { label: 'مصروفات إدارية', labelEn: 'Administrative Expenses', value: data.admin, highlight: false },
+                    { label: 'الربح التشغيلي', labelEn: 'Operating Income', value: data.operatingIncome, highlight: true },
+                    { label: 'الفائدة', labelEn: 'Interest Expense', value: data.interest, highlight: false },
+                    { label: 'الضريبة', labelEn: 'Income Tax', value: data.tax, highlight: false }
+                );
+            }
+
+            rows.push({ label: 'صافي الدخل', labelEn: 'NET INCOME', value: data.netIncome, highlight: true });
+
+            tbody.innerHTML = rows.map(row => `
+                <tr ${row.highlight ? 'class="highlight"' : ''}>
+                    <td>
+                        <span class="ar">${row.label}</span>
+                        <span class="en" style="display:none;">${row.labelEn}</span>
+                    </td>
+                    <td class="amount-value">${formatNumber(row.value)}</td>
+                    <td class="percentage">${data.sales > 0 ? ((row.value / data.sales) * 100).toFixed(2) : '0.00'}%</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderRatios() {
+            const data = financialData;
+            const ratiosDiv = document.getElementById('ratios-grid');
+
+            const netProfitMargin = data.sales > 0 ? (data.netIncome / data.sales * 100).toFixed(2) : 0;
+            const roa = data.totalAssets > 0 ? (data.netIncome / data.totalAssets * 100).toFixed(2) : 0;
+            const roe = data.equity > 0 ? (data.netIncome / data.equity * 100).toFixed(2) : 0;
+            const currentRatio = data.currentLiab > 0 ? (data.currentAssets / data.currentLiab).toFixed(2) : 0;
+            const quickRatio = data.currentLiab > 0 ? ((data.currentAssets - data.inventory) / data.currentLiab).toFixed(2) : 0;
+            const cashRatio = data.currentLiab > 0 ? (data.cash / data.currentLiab).toFixed(2) : 0;
+            const assetTurnover = data.totalAssets > 0 ? (data.sales / data.totalAssets).toFixed(2) : 0;
+            const debtToEquity = data.equity > 0 ? (data.totalLiab / data.equity).toFixed(2) : 0;
+
+            ratiosDiv.innerHTML = `
+                <div class="ratio-category">
+                    <h3><span class="ar">نسب الربحية</span><span class="en" style="display:none;">Profitability</span></h3>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">هامش صافي الربح</span><span class="en" style="display:none;">Net Profit Margin</span></div>
+                        <div class="ratio-formula">Net Income / Sales × 100</div>
+                        <div class="ratio-value">${netProfitMargin}%</div>
+                    </div>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">العائد على الأصول</span><span class="en" style="display:none;">ROA</span></div>
+                        <div class="ratio-formula">Net Income / Total Assets × 100</div>
+                        <div class="ratio-value">${roa}%</div>
+                    </div>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">العائد على حقوق الملاك</span><span class="en" style="display:none;">ROE</span></div>
+                        <div class="ratio-formula">Net Income / Equity × 100</div>
+                        <div class="ratio-value">${roe}%</div>
+                    </div>
+                </div>
+                <div class="ratio-category">
+                    <h3><span class="ar">نسب السيولة</span><span class="en" style="display:none;">Liquidity</span></h3>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">النسبة الحالية</span><span class="en" style="display:none;">Current Ratio</span></div>
+                        <div class="ratio-formula">Current Assets / Current Liabilities</div>
+                        <div class="ratio-value">${currentRatio}</div>
+                    </div>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">النسبة السريعة</span><span class="en" style="display:none;">Quick Ratio</span></div>
+                        <div class="ratio-formula">(CA - Inventory) / CL</div>
+                        <div class="ratio-value">${quickRatio}</div>
+                    </div>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">نسبة النقدية</span><span class="en" style="display:none;">Cash Ratio</span></div>
+                        <div class="ratio-formula">Cash / Current Liabilities</div>
+                        <div class="ratio-value">${cashRatio}</div>
+                    </div>
+                </div>
+                <div class="ratio-category">
+                    <h3><span class="ar">نسب الكفاءة</span><span class="en" style="display:none;">Efficiency</span></h3>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">معدل دوران الأصول</span><span class="en" style="display:none;">Asset Turnover</span></div>
+                        <div class="ratio-formula">Sales / Total Assets</div>
+                        <div class="ratio-value">${assetTurnover}</div>
+                    </div>
+                </div>
+                <div class="ratio-category">
+                    <h3><span class="ar">نسب الالتزامات</span><span class="en" style="display:none;">Leverage</span></h3>
+                    <div class="ratio-item">
+                        <div class="ratio-name"><span class="ar">نسبة الدين إلى حقوق الملكية</span><span class="en" style="display:none;">Debt to Equity</span></div>
+                        <div class="ratio-formula">Total Liabilities / Equity</div>
+                        <div class="ratio-value">${debtToEquity}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDuPont() {
+            const data = financialData;
+            const npm = data.sales > 0 ? ((data.netIncome / data.sales) * 100).toFixed(2) : 0;
+            const assetTurnover = data.totalAssets > 0 ? (data.sales / data.totalAssets).toFixed(2) : 0;
+            const financialMultiplier = data.equity > 0 ? (data.totalAssets / data.equity).toFixed(2) : 0;
+            const roe = data.equity > 0 ? ((data.netIncome / data.equity) * 100).toFixed(2) : 0;
+
+            const content = document.getElementById('dupont-content');
+            content.innerHTML = `
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">
+                    <span class="ar">تحليل DuPont - تحليل العائد على حقوق الملاك</span>
+                    <span class="en" style="display:none;">DuPont Analysis - ROE Decomposition</span>
+                </h2>
+                <div class="dupont-formula">
+                    <div class="dupont-component">
+                        <div class="dupont-component-label"><span class="ar">هامش صافي الربح</span><span class="en" style="display:none;">Net Profit Margin</span></div>
+                        <div class="dupont-component-value">${npm}%</div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5em;">×</div>
+                    <div class="dupont-component">
+                        <div class="dupont-component-label"><span class="ar">معدل دوران الأصول</span><span class="en" style="display:none;">Asset Turnover</span></div>
+                        <div class="dupont-component-value">${assetTurnover}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5em;">×</div>
+                    <div class="dupont-component">
+                        <div class="dupont-component-label"><span class="ar">المضاعف المالي</span><span class="en" style="display:none;">Financial Multiplier</span></div>
+                        <div class="dupont-component-value">${financialMultiplier}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5em;">=</div>
+                    <div class="dupont-component" style="background: linear-gradient(135deg, var(--success-color), var(--warning-color));">
+                        <div class="dupont-component-label"><span class="ar">ROE</span><span class="en" style="display:none;">Return on Equity</span></div>
+                        <div class="dupont-component-value" style="font-size: 2em;">${roe}%</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateComparison() {
+            const cyInputs = document.querySelectorAll("#comparative .cy");
+
+            cyInputs.forEach((cy) => {
+                const key = cy.dataset.key;
+                const py = document.querySelector('.py[data-key="' + key + '"]');
+                const ac = document.querySelector('.ac[data-key="' + key + '"]');
+                const pc = document.querySelector('.pc[data-key="' + key + '"]');
+
+                const curr = parseFloat(cy.value) || 0;
+                const prev = parseFloat(py.value) || 0;
+
+                const absChange = curr - prev;
+                const pctChange = prev !== 0 ? (absChange / prev) * 100 : 0;
+
+                ac.textContent = formatNumber(absChange);
+                
+                if (pctChange > 0) {
+                    pc.textContent = "+" + pctChange.toFixed(2) + "%";
+                    pc.className = "pc positive-change";
+                } else if (pctChange < 0) {
+                    pc.textContent = pctChange.toFixed(2) + "%";
+                    pc.className = "pc negative-change";
+                } else {
+                    pc.textContent = "0.00%";
+                    pc.className = "pc";
+                }
+            });
+        }
+
+        function updateData(event) {
+            event.preventDefault();
+            
+            calculateFinancials();
+            renderIncomeStatement();
+            renderRatios();
+            renderDuPont();
+            
+            const alert = document.getElementById('alert-success');
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+
+        function resetForm() {
+            document.querySelector('form').reset();
+            document.getElementById('simple-mode').checked = false;
+            toggleInputMode();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateFinancials();
+            renderIncomeStatement();
+            renderRatios();
+            renderDuPont();
+            console.log('Financial Analysis Dashboard loaded successfully!');
+        });
+    </script>
+</body>
+</html>
