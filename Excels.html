@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Systems | Ahmed Mohalhal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a2a6c;
+            --excel-green: #1D6F42; /* لون الإكسيل الرسمي */
+            --secondary-color: #f4f7f6;
+            --text-dark: #333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+        }
+
+        header {
+            background: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--excel-green);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .excel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .excel-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .excel-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 5px; height: 100%;
+            background: var(--excel-green);
+        }
+
+        .excel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .excel-icon {
+            font-size: 2.5rem;
+            color: var(--excel-green);
+            margin-bottom: 1rem;
+        }
+
+        .excel-card h3 {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .excel-card p {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .btn-preview {
+            background: var(--secondary-color);
+            color: var(--text-dark);
+        }
+
+        .btn-download {
+            background: var(--excel-green);
+            color: white;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Modal Preview */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2% auto;
+            width: 90%; height: 90%;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .close-modal {
+            position: absolute;
+            top: -40px; right: 0;
+            color: white; font-size: 30px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <h1>Excel & Financial Systems</h1>
+        <p>Automated Accounting Solutions & Financial Modeling</p>
+    </header>
+
+    <div class="container">
+        <div class="excel-grid">
+            
+            <div class="excel-card">
+                <i class="fas fa-file-excel excel-icon"></i>
+                <h3>Accounting System</h3>
+                <p>Comprehensive accounting system for transaction recording and financial reporting.</p>
+                <div class="action-btns">
+                    <a href="javascript:void(0)" onclick="previewExcel('Excels/Accounting System.xlsx')" class="btn btn-preview">Preview</a>
+                    <a href="Excels/Accounting System.xlsx" class="btn btn-download">Download</a>
+                </div>
+            </div>
+
+            <div class="excel-card">
+                <i class="fas fa-calculator excel-icon"></i>
+                <h3>Break-Even Analysis</h3>
+                <p>Dynamic model to calculate break-even points and margin of safety.</p>
+                <div class="action-btns">
+                    <a href="javascript:void(0)" onclick="previewExcel('Excels/Break-Even Analysis.xlsx')" class="btn btn-preview">Preview</a>
+                    <a href="Excels/Break-Even Analysis.xlsx" class="btn btn-download">Download</a>
+                </div>
+            </div>
+
+            <div class="excel-card">
+                <i class="fas fa-money-bill-wave excel-icon"></i>
+                <h3>Installments Collection</h3>
+                <p>System for tracking and managing customer installment schedules.</p>
+                <div class="action-btns">
+                    <a href="javascript:void(0)" onclick="previewExcel('Excels/Installments Collection System.xlsx')" class="btn btn-preview">Preview</a>
+                    <a href="Excels/Installments Collection System.xlsx" class="btn btn-download">Download</a>
+                </div>
+            </div>
+
+            <div class="excel-card">
+                <i class="fas fa-chart-line excel-icon"></i>
+                <h3>Financial Analysis</h3>
+                <p>Ratio analysis and trend identification using automated data processing.</p>
+                <div class="action-btns">
+                    <a href="javascript:void(0)" onclick="previewExcel('Excels/Financial Analysis.xlsx')" class="btn btn-preview">Preview</a>
+                    <a href="Excels/Financial Analysis.xlsx" class="btn btn-download">Download</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="excelModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <iframe id="excelFrame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        function previewExcel(path) {
+            const modal = document.getElementById('excelModal');
+            const iframe = document.getElementById('excelFrame');
+            
+            // تحويل المسار لرابط كامل (Absolute URL) لمتصفح أوفيس أونلاين
+            const fullUrl = window.location.origin + window.location.pathname.replace('Excels.html', '') + encodeURI(path);
+            
+            // استخدام Microsoft Office Viewer لعرض الملف
+            iframe.src = "https://view.officeapps.live.com/op/embed.aspx?src=" + fullUrl;
+            
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            document.getElementById('excelModal').style.display = "none";
+            document.getElementById('excelFrame').src = "";
+            document.body.style.overflow = "auto";
+        }
+    </script>
+
+    <footer>
+        &copy; 2026 Ahmed Mohalhal | Professional Accounting Portfolio
+    </footer>
+</body>
+</html>
