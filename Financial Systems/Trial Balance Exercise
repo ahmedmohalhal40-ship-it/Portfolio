@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسويات الجردية وميزان المراجعة - مبادئ المحاسبة المالية</title>
+   <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #136a8a 50%, #267871 75%, #43c6ac 100%);
+        min-height: 100vh;
+        padding: 10px;
+        direction: rtl;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 24px;
+        box-shadow: 0 16px 45px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #136a8a, #267871, #43c6ac);
+        padding: 25px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .header h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        font-weight: bold;
+    }
+
+    .header h2 {
+        font-size: 22px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .header p {
+        font-size: 18px;
+        opacity: 0.95;
+        font-weight: 500;
+    }
+
+    .navigation {
+        background: linear-gradient(90deg, #2a5298, #136a8a, #267871);
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-btn {
+        background: linear-gradient(135deg, #43c6ac, #2a9d8f);
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(67, 198, 172, 0.4);
+        background: linear-gradient(135deg, #2a9d8f, #43c6ac);
+    }
+
+    .nav-btn.active {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
+    }
+
+    .content {
+        padding: 25px;
+        min-height: 400px;
+    }
+
+    .section {
+        display: none;
+    }
+
+    .section.active {
+        display: block;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideFromLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes highlight {
+        0%, 100% { background-color: transparent; }
+        50% { background-color: rgba(67, 198, 172, 0.3); }
+    }
+
+    @keyframes moveToLedger {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 0.7; color: #f39c12; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .section-title {
+        font-size: 26px;
+        color: #136a8a;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #136a8a, #267871);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(19, 106, 138, 0.3);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(19, 106, 138, 0.5);
+        background: linear-gradient(135deg, #267871, #43c6ac);
+    }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+    }
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+    }
+
+    .btn-warning:hover {
+        background: linear-gradient(135deg, #e67e22, #f39c12);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    th {
+        background: linear-gradient(135deg, #136a8a, #267871);
+        color: white;
+        padding: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    tr:hover {
+        background-color: rgba(67, 198, 172, 0.1);
+    }
+
+    .row-hidden { display: none; }
+
+    .row-visible { animation: slideFromLeft 0.5s ease-out; }
+
+    .posting-highlight { animation: highlight 1.5s ease-in-out; }
+
+    .explanation {
+        background: linear-gradient(135deg, #e3f2fd, #b3e5fc);
+        padding: 14px;
+        margin: 10px 0;
+        border-radius: 10px;
+        font-size: 15px;
+        border-right: 4px solid #136a8a;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .ledger-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+    .t-account {
+        border: 3px solid #136a8a;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        background: white;
+        min-width: 260px;
+        max-width: 360px;
+    }
+
+    .t-account-title {
+        background: linear-gradient(135deg, #136a8a, #267871);
+        color: white;
+        padding: 12px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .t-account-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .t-account-side {
+        padding: 10px;
+        font-size: 14px;
+        min-height: 120px;
+    }
+
+    .t-account-side.debit {
+        border-left: 2px solid #136a8a;
+    }
+
+    .t-account-side h4 {
+        text-align: center;
+        color: #136a8a;
+        margin-bottom: 10px;
+        font-size: 15px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid #43c6ac;
+    }
+
+    .t-account-entry {
+        padding: 8px;
+        margin: 6px 0;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 6px;
+        display: none;
+        border-right: 3px solid #43c6ac;
+        font-size: 13px;
+    }
+
+    .t-account-entry.visible {
+        display: block;
+        animation: slideFromLeft 0.5s ease-out;
+    }
+
+    .t-account-balance {
+        padding: 8px;
+        margin: 10px 0 5px 0;
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border-radius: 8px;
+        font-weight: bold;
+        border: 2px solid #f39c12;
+        display: none;
+        font-size: 14px;
+    }
+
+    .t-account-balance.visible {
+        display: block;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .adjustment-card {
+        background: white;
+        border: 3px solid #43c6ac;
+        border-radius: 12px;
+        padding: 18px;
+        margin: 18px 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        display: none;
+        font-size: 15px;
+    }
+
+    .adjustment-card.visible {
+        display: block;
+        animation: fadeIn 0.6s ease-in;
+    }
+
+    .adjustment-title {
+        font-size: 18px;
+        color: #136a8a;
+        margin-bottom: 12px;
+        font-weight: bold;
+    }
+
+    .adjustment-explanation {
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 14px;
+        color: #2c3e50;
+    }
+
+    .adjustment-entry {
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-top: 10px;
+        border-right: 4px solid #27ae60;
+    }
+
+    .hidden-solution {
+        filter: blur(8px);
+        user-select: none;
+        transition: all 0.3s ease;
+    }
+
+    .moving-number { animation: moveNumber 1s ease-out; }
+
+    @keyframes moveNumber {
+        0% { transform: scale(1.5); color: #f39c12; }
+        100% { transform: scale(1); color: inherit; }
+    }
+
+    .total-row {
+        background: linear-gradient(135deg, #ffd89b, #19547b) !important;
+        font-weight: bold;
+        font-size: 18px !important;
+        color: white;
+    }
+
+    .balance-row {
+        background: linear-gradient(135deg, #a8edea, #fed6e3) !important;
+        font-weight: bold;
+    }
+
+    @media print {
+        .navigation, .controls {
+            display: none;
+        }
+    }
+
+    /* زر واتساب – مصغّر */
+    .whatsapp-floating {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 9999;
+        background-color: #25D366;
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 18px;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-decoration: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        opacity: 0.9;
+    }
+
+    .whatsapp-floating:hover {
+        opacity: 1;
+        transform: translateY(-1px);
+    }
+
+    .whatsapp-icon {
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        background-color: #fff;
+        border-radius: 50%;
+        position: relative;
+    }
+
+    .whatsapp-icon::before {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        background-color: #25D366;
+    }
+
+    /* تصغير إضافي للموبايل */
+    @media (max-width: 480px) {
+        body {
+            padding: 6px;
+        }
+
+        .header {
+            padding: 18px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .header h2 {
+            font-size: 18px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+
+        .navigation {
+            padding: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+        .content {
+            padding: 15px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+        th {
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 7px;
+            font-size: 12px;
+        }
+
+        .explanation {
+            font-size: 12px;
+            padding: 10px;
+        }
+
+        .t-account {
+            min-width: 220px;
+            max-width: 100%;
+        }
+
+        .t-account-title {
+            font-size: 15px;
+            padding: 10px;
+        }
+
+        .t-account-side {
+            font-size: 12px;
+            min-height: 100px;
+            padding: 8px;
+        }
+
+        .t-account-side h4 {
+            font-size: 13px;
+        }
+
+        .t-account-entry {
+            font-size: 11px;
+            padding: 6px;
+        }
+
+        .t-account-balance {
+            font-size: 12px;
+        }
+
+        .adjustment-title {
+            font-size: 15px;
+        }
+
+        .adjustment-explanation,
+        .adjustment-entry {
+            font-size: 12px;
+        }
+
+        .total-row {
+            font-size: 14px !important;
+        }
+
+        .whatsapp-floating {
+            padding: 3px 7px;
+            font-size: 10px;
+        }
+
+        .whatsapp-icon {
+            width: 12px;
+            height: 12px;
+        }
+    }
+    </style>
+</head>
+<body>
+<a href="https://wa.me/201119859192" class="whatsapp-floating" target="_blank">
+    <img src="https://i.pinimg.com/736x/c6/09/0d/c6090df18193e2616a6a32076883b70c.jpg"
+         alt="WhatsApp"
+         style="width:18px; height:18px; border-radius:50%; object-fit:cover;">
+    <span>للتواصل</span>
+</a>
+    <div class="container">
+        <div class="header">
+            <h1>مادة مبادئ المحاسبة المالية</h1>
+            <h2>التسويات الجردية وميزان المراجعة</h2>
+            <p>إعداد أ/ أحمد مهلهل - معيد بقسم المحاسبة</p>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('problem')">المسألة</button>
+            <button class="nav-btn" onclick="showSection('journal')">دفتر اليومية</button>
+            <button class="nav-btn" onclick="showSection('ledger')">دفتر الأستاذ</button>
+            <button class="nav-btn" onclick="showSection('trial1')">ميزان المراجعة (قبل)</button>
+            <button class="nav-btn" onclick="showSection('adjustments')">التسويات الجردية</button>
+            <button class="nav-btn" onclick="showSection('trial2')">ميزان المراجعة (بعد)</button>
+        </div>
+
+        <div class="content">
+            <!-- قسم المسألة -->
+            <div id="problem" class="section active">
+                <h2 class="section-title">📝 المسألة (العمليات المالية)</h2>
+                <div class="controls">
+                    <button class="btn" onclick="showNextProblemRow()">عرض العملية التالية</button>
+                    <button class="btn btn-success" onclick="showAllProblemRows()">عرض كل العمليات</button>
+                </div>
+                <table id="problemTable">
+                    <thead>
+                        <tr>
+                            <th>رقم</th>
+                            <th>التاريخ</th>
+                            <th>العملية المالية</th>
+                        </tr>
+                    </thead>
+                    <tbody id="problemBody"></tbody>
+                </table>
+            </div>
+
+            <!-- قسم دفتر اليومية -->
+            <div id="journal" class="section">
+                <h2 class="section-title">📑 دفتر اليومية (قيود اليومية)</h2>
+                <div class="controls">
+                    <button class="btn" onclick="showNextJournalEntry()">تسجيل القيد التالي</button>
+                    <button class="btn btn-success" onclick="showAllJournalEntries()">تسجيل كل القيود</button>
+                    <button class="btn btn-warning" onclick="toggleJournalSolution()">إظهار/إخفاء الحل</button>
+                </div>
+                <table id="journalTable">
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>التاريخ</th>
+                            <th>البيان</th>
+                            <th class="solution-col">مدين</th>
+                            <th class="solution-col">دائن</th>
+                        </tr>
+                    </thead>
+                    <tbody id="journalBody"></tbody>
+                </table>
+            </div>
+
+            <!-- قسم دفتر الأستاذ -->
+            <div id="ledger" class="section">
+                <h2 class="section-title">🗂️ دفتر الأستاذ (T-Accounts)</h2>
+                <div class="controls">
+                    <button class="btn" onclick="postNextEntry()">ترحيل القيد التالي</button>
+                    <button class="btn btn-success" onclick="postAllEntries()">ترحيل كل القيود</button>
+                </div>
+                <div id="ledgerAccounts" class="ledger-container"></div>
+            </div>
+
+            <!-- ميزان المراجعة قبل التسويات -->
+            <div id="trial1" class="section">
+                <h2 class="section-title">⚖️ ميزان المراجعة قبل التسويات</h2>
+                <div class="controls">
+                    <button class="btn" onclick="showNextTrialRow()">إضافة الصف التالي</button>
+                    <button class="btn btn-success" onclick="showAllTrialRows()">عرض الميزان بالكامل</button>
+                    <button class="btn btn-warning" onclick="toggleTrialSolution()">إظهار/إخفاء الحل</button>
+                </div>
+                <table id="trialTable">
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>اسم الحساب</th>
+                            <th class="solution-col">مدين</th>
+                            <th class="solution-col">دائن</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trialBody"></tbody>
+                </table>
+            </div>
+
+            <!-- التسويات الجردية -->
+            <div id="adjustments" class="section">
+                <h2 class="section-title">⚙️ التسويات الجردية</h2>
+                <div class="controls">
+                    <button class="btn" onclick="showNextAdjustment()">عرض التسوية التالية</button>
+                    <button class="btn btn-success" onclick="showAllAdjustments()">عرض كل التسويات</button>
+                </div>
+                <div id="adjustmentsContent"></div>
+            </div>
+
+            <!-- ميزان المراجعة بعد التسويات -->
+            <div id="trial2" class="section">
+                <h2 class="section-title">⚖️ ميزان المراجعة بعد التسويات</h2>
+                <div class="controls">
+                    <button class="btn" onclick="showNextFinalRow()">إضافة الصف التالي</button>
+                    <button class="btn btn-success" onclick="showAllFinalRows()">عرض الميزان بالكامل</button>
+                    <button class="btn btn-warning" onclick="toggleFinalSolution()">إظهار/إخفاء الحل</button>
+                </div>
+                <table id="finalTrialTable">
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>اسم الحساب</th>
+                            <th class="solution-col">الرصيد قبل</th>
+                            <th class="solution-col">تعديل مدين</th>
+                            <th class="solution-col">تعديل دائن</th>
+                            <th class="solution-col">الرصيد بعد</th>
+                        </tr>
+                    </thead>
+                    <tbody id="finalTrialBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // البيانات
+        const problemData = [
+            {no: 1, date: '1/1', text: 'بدأ صاحب الشركة النشاط بإيداع مبلغ 150,000 جنيه في حساب الشركة في البنك كرأس مال', explanation: 'رأس المال هو المبلغ الذي يستثمره صاحب المشروع لبدء النشاط'},
+            {no: 2, date: '2/1', text: 'اشترت الشركة أثاث مكتبي بمبلغ 15,000 جنيه، دفعته بشيك من البنك', explanation: 'الأثاث أصل ثابت يستخدم لفترة طويلة، وتم الدفع من البنك'},
+            {no: 3, date: '5/1', text: 'دفعت الشركة إيجار المكتب عن شهر يناير 5,000 جنيه بشيك من البنك', explanation: 'الإيجار مصروف يخص الفترة الحالية'},
+            {no: 4, date: '8/1', text: 'اشترت الشركة مستلزمات بمبلغ 20,000 جنيه على الحساب من مورد الخير', explanation: 'شراء مستلزمات بالآجل، مما يخلق التزام (دائنون)'},
+            {no: 5, date: '12/1', text: 'قدمت الشركة خدمات استشارية للعملاء وحصلت على مبلغ 35,000 جنيه نقداً', explanation: 'إيراد محقق تم تحصيله نقداً في نفس الوقت'},
+            {no: 6, date: '15/1', text: 'قدمت الشركة خدمات استشارية أخرى بمبلغ 18,000 جنيه على الحساب لعميل الوفاء', explanation: 'إيراد محقق لكن لم يتم تحصيله بعد (مدينون)'},
+            {no: 7, date: '20/1', text: 'سددت الشركة نصف المبلغ المستحق لمورد الخير (10,000 جنيه) بشيك', explanation: 'سداد جزء من الالتزامات (تخفيض الدائنون)'},
+            {no: 8, date: '24/1', text: 'حصلت الشركة من عميل الوفاء على مبلغ 10,000 جنيه نقداً', explanation: 'تحصيل جزء من المستحقات من العملاء'},
+            {no: 9, date: '28/1', text: 'سحب صاحب الشركة مبلغ 3,000 جنيه نقداً للاستخدام الشخصي', explanation: 'المسحوبات تقلل من حقوق الملكية'},
+            {no: 10, date: '31/1', text: 'دفعت الشركة مرتبات الموظفين عن شهر يناير 7,000 جنيه نقداً', explanation: 'المرتبات مصروف يخص الفترة'},
+            {no: 11, date: '1/1', text: 'دفعت الشركة مبلغ 2,400 جنيه بشيك مقابل تأمين سنوي على الأصول', explanation: 'مصروف مدفوع مقدماً يخص 12 شهر'},
+            {no: 12, date: '25/1', text: 'حصلت الشركة مبلغ 4,000 جنيه نقداً مقابل تقديم خدمات لعميل لمدة شهرين تبدأ من هذا التاريخ', explanation: 'إيراد تم تحصيله مقدماً (التزام حتى يتم تقديم الخدمة)'}
+        ];
+
+        const journalData = [
+            {no: 1, date: '1/1', desc: 'من حـ/ البنك', debit: '150,000', credit: '', isMain: true},
+            {no: 1, date: '', desc: '    إلى حـ/ رأس المال', debit: '', credit: '150,000', isMain: false},
+
+            {no: 2, date: '2/1', desc: 'من حـ/ الأثاث', debit: '15,000', credit: '', isMain: true},
+            {no: 2, date: '', desc: '    إلى حـ/ البنك', debit: '', credit: '15,000', isMain: false},
+
+            {no: 3, date: '5/1', desc: 'من حـ/ مصروف الإيجار', debit: '5,000', credit: '', isMain: true},
+            {no: 3, date: '', desc: '    إلى حـ/ البنك', debit: '', credit: '5,000', isMain: false},
+
+            {no: 4, date: '8/1', desc: 'من حـ/ المشتريات (المستلزمات)', debit: '20,000', credit: '', isMain: true},
+            {no: 4, date: '', desc: '    إلى حـ/ الدائنون - مورد الخير', debit: '', credit: '20,000', isMain: false},
+
+            {no: 5, date: '12/1', desc: 'من حـ/ الخزينة', debit: '35,000', credit: '', isMain: true},
+            {no: 5, date: '', desc: '    إلى حـ/ إيراد الخدمات', debit: '', credit: '35,000', isMain: false},
+
+            {no: 6, date: '15/1', desc: 'من حـ/ المدينون - عميل الوفاء', debit: '18,000', credit: '', isMain: true},
+            {no: 6, date: '', desc: '    إلى حـ/ إيراد الخدمات', debit: '', credit: '18,000', isMain: false},
+
+            {no: 7, date: '20/1', desc: 'من حـ/ الدائنون - مورد الخير', debit: '10,000', credit: '', isMain: true},
+            {no: 7, date: '', desc: '    إلى حـ/ البنك', debit: '', credit: '10,000', isMain: false},
+
+            {no: 8, date: '24/1', desc: 'من حـ/ الخزينة', debit: '10,000', credit: '', isMain: true},
+            {no: 8, date: '', desc: '    إلى حـ/ المدينون - عميل الوفاء', debit: '', credit: '10,000', isMain: false},
+
+            {no: 9, date: '28/1', desc: 'من حـ/ المسحوبات', debit: '3,000', credit: '', isMain: true},
+            {no: 9, date: '', desc: '    إلى حـ/ الخزينة', debit: '', credit: '3,000', isMain: false},
+
+            {no: 10, date: '31/1', desc: 'من حـ/ مصروف المرتبات', debit: '7,000', credit: '', isMain: true},
+            {no: 10, date: '', desc: '    إلى حـ/ الخزينة', debit: '', credit: '7,000', isMain: false},
+
+            {no: 11, date: '1/1', desc: 'من حـ/ تأمين مدفوع مقدماً', debit: '2,400', credit: '', isMain: true},
+            {no: 11, date: '', desc: '    إلى حـ/ البنك', debit: '', credit: '2,400', isMain: false},
+
+            {no: 12, date: '25/1', desc: 'من حـ/ الخزينة', debit: '4,000', credit: '', isMain: true},
+            {no: 12, date: '', desc: '    إلى حـ/ إيراد خدمات غير مكتسب', debit: '', credit: '4,000', isMain: false}
+        ];
+
+        // حسابات دفتر الأستاذ
+        const ledgerAccounts = {
+            'البنك': {
+                debit: [
+                    {date: '1/1', desc: 'رأس المال', amount: '150,000', entry: 1},
+                ],
+                credit: [
+                    {date: '2/1', desc: 'الأثاث', amount: '15,000', entry: 2},
+                    {date: '5/1', desc: 'مصروف الإيجار', amount: '5,000', entry: 3},
+                    {date: '20/1', desc: 'الدائنون', amount: '10,000', entry: 7},
+                    {date: '1/1', desc: 'تأمين مدفوع مقدماً', amount: '2,400', entry: 11}
+                ],
+                balance: '117,600 مدين'
+            },
+            'الخزينة': {
+                debit: [
+                    {date: '12/1', desc: 'إيراد الخدمات', amount: '35,000', entry: 5},
+                    {date: '24/1', desc: 'المدينون', amount: '10,000', entry: 8},
+                    {date: '25/1', desc: 'إيراد غير مكتسب', amount: '4,000', entry: 12}
+                ],
+                credit: [
+                    {date: '28/1', desc: 'المسحوبات', amount: '3,000', entry: 9},
+                    {date: '31/1', desc: 'مصروف المرتبات', amount: '7,000', entry: 10}
+                ],
+                balance: '39,000 مدين'
+            },
+            'رأس المال': {
+                debit: [],
+                credit: [
+                    {date: '1/1', desc: 'البنك', amount: '150,000', entry: 1}
+                ],
+                balance: '150,000 دائن'
+            },
+            'الأثاث': {
+                debit: [
+                    {date: '2/1', desc: 'البنك', amount: '15,000', entry: 2}
+                ],
+                credit: [],
+                balance: '15,000 مدين'
+            },
+            'مصروف الإيجار': {
+                debit: [
+                    {date: '5/1', desc: 'البنك', amount: '5,000', entry: 3}
+                ],
+                credit: [],
+                balance: '5,000 مدين'
+            },
+            'المشتريات (المستلزمات)': {
+                debit: [
+                    {date: '8/1', desc: 'الدائنون', amount: '20,000', entry: 4}
+                ],
+                credit: [],
+                balance: '20,000 مدين'
+            },
+            'الدائنون - مورد الخير': {
+                debit: [
+                    {date: '20/1', desc: 'البنك', amount: '10,000', entry: 7}
+                ],
+                credit: [
+                    {date: '8/1', desc: 'المشتريات', amount: '20,000', entry: 4}
+                ],
+                balance: '10,000 دائن'
+            },
+            'إيراد الخدمات': {
+                debit: [],
+                credit: [
+                    {date: '12/1', desc: 'الخزينة', amount: '35,000', entry: 5},
+                    {date: '15/1', desc: 'المدينون', amount: '18,000', entry: 6}
+                ],
+                balance: '53,000 دائن'
+            },
+            'المدينون - عميل الوفاء': {
+                debit: [
+                    {date: '15/1', desc: 'إيراد الخدمات', amount: '18,000', entry: 6}
+                ],
+                credit: [
+                    {date: '24/1', desc: 'الخزينة', amount: '10,000', entry: 8}
+                ],
+                balance: '8,000 مدين'
+            },
+            'المسحوبات': {
+                debit: [
+                    {date: '28/1', desc: 'الخزينة', amount: '3,000', entry: 9}
+                ],
+                credit: [],
+                balance: '3,000 مدين'
+            },
+            'مصروف المرتبات': {
+                debit: [
+                    {date: '31/1', desc: 'الخزينة', amount: '7,000', entry: 10}
+                ],
+                credit: [],
+                balance: '7,000 مدين'
+            },
+            'تأمين مدفوع مقدماً': {
+                debit: [
+                    {date: '1/1', desc: 'البنك', amount: '2,400', entry: 11}
+                ],
+                credit: [],
+                balance: '2,400 مدين'
+            },
+            'إيراد خدمات غير مكتسب': {
+                debit: [],
+                credit: [
+                    {date: '25/1', desc: 'الخزينة', amount: '4,000', entry: 12}
+                ],
+                balance: '4,000 دائن'
+            }
+        };
+
+        const trialBalanceData = [
+            {no: 1, account: 'البنك', debit: '117,600', credit: ''},
+            {no: 2, account: 'الخزينة', debit: '39,000', credit: ''},
+            {no: 3, account: 'رأس المال', debit: '', credit: '150,000'},
+            {no: 4, account: 'الأثاث', debit: '15,000', credit: ''},
+            {no: 5, account: 'مصروف الإيجار', debit: '5,000', credit: ''},
+            {no: 6, account: 'المشتريات (المستلزمات)', debit: '20,000', credit: ''},
+            {no: 7, account: 'الدائنون', debit: '', credit: '10,000'},
+            {no: 8, account: 'إيراد الخدمات', debit: '', credit: '53,000'},
+            {no: 9, account: 'المدينون', debit: '8,000', credit: ''},
+            {no: 10, account: 'المسحوبات', debit: '3,000', credit: ''},
+            {no: 11, account: 'مصروف المرتبات', debit: '7,000', credit: ''},
+            {no: 12, account: 'تأمين مدفوع مقدماً', debit: '2,400', credit: ''},
+            {no: 13, account: 'إيراد خدمات غير مكتسب', debit: '', credit: '4,000'},
+            {no: 'الإجمالي', account: '', debit: '217,000', credit: '217,000', isTotal: true}
+        ];
+
+        const adjustmentsData = [
+            {
+                title: 'أ) تسوية مصروف التأمين',
+                explanation: 'تم دفع 2,400 جنيه تأمين سنوي (12 شهر)، ونحتاج تسجيل مصروف شهر يناير فقط:<br><strong>2,400 ÷ 12 = 200 جنيه</strong>',
+                entry: 'من حـ/ مصروف التأمين&nbsp;&nbsp;&nbsp;&nbsp;200<br>&nbsp;&nbsp;&nbsp;&nbsp;إلى حـ/ تأمين مدفوع مقدماً&nbsp;&nbsp;&nbsp;&nbsp;200'
+            },
+            
+            {
+                title: 'ب) تسوية الإيراد المكتسب',
+                explanation: 'تم تحصيل 4,000 جنيه مقدماً مقابل خدمات لمدة شهرين، وتم تقديم خدمة شهر واحد :<br><strong>4,000 × 1/2 = 2,000 جنيه</strong>',
+                entry: 'من حـ/ إيراد خدمات غير مكتسب&nbsp;&nbsp;&nbsp;&nbsp;2,000<br>&nbsp;&nbsp;&nbsp;&nbsp;إلى حـ/ إيراد الخدمات&nbsp;&nbsp;&nbsp;&nbsp;2,000'
+            }
+        ];
+
+        const finalTrialData = [
+            {no: 1, account: 'البنك', before: '117,600 مدين', adjDebit: '', adjCredit: '', after: '117,600 مدين'},
+            {no: 2, account: 'الخزينة', before: '39,000 مدين', adjDebit: '', adjCredit: '', after: '39,000 مدين'},
+            {no: 3, account: 'رأس المال', before: '150,000 دائن', adjDebit: '', adjCredit: '', after: '150,000 دائن'},
+            {no: 4, account: 'الأثاث', before: '15,000 مدين', adjDebit: '', adjCredit: '', after: '15,000 مدين'},
+            {no: 5, account: 'مصروف الإيجار', before: '5,000 مدين', adjDebit: '', adjCredit: '', after: '5,000 مدين'},
+            {no: 6, account: 'المشتريات (المستلزمات)', before: '20,000 مدين', adjDebit: '', adjCredit: '', after: '20,000 مدين'},
+            {no: 7, account: 'الدائنون', before: '10,000 دائن', adjDebit: '', adjCredit: '', after: '10,000 دائن'},
+            {no: 8, account: 'إيراد الخدمات', before: '53,000 دائن', adjDebit: '', adjCredit: '2,000 (ب.ت)', after: '55,000 دائن'},
+            {no: 9, account: 'المدينون', before: '8,000 مدين', adjDebit: '', adjCredit: '', after: '8,000 مدين'},
+            {no: 10, account: 'المسحوبات', before: '3,000 مدين', adjDebit: '', adjCredit: '', after: '3,000 مدين'},
+            {no: 11, account: 'مصروف المرتبات', before: '7,000 مدين', adjDebit: '', adjCredit: '', after: '7,000 مدين'},
+            {no: 12, account: 'تأمين مدفوع مقدماً', before: '2,400 مدين', adjDebit: '', adjCredit: '200 (أ.ت)', after: '2,200 مدين'},
+            {no: 13, account: 'إيراد خدمات غير مكتسب', before: '4,000 دائن', adjDebit: '2,000 (ب.ت)', adjCredit: '', after: '2,000 دائن'},
+            {no: 14, account: 'مصروف التأمين', before: '0', adjDebit: '200 (أ.ت)', adjCredit: '', after: '200 مدين'},
+        ];
+
+        // متغيرات التحكم
+        let currentProblemRow = 0;
+        let currentJournalEntry = 0;
+        let currentLedgerAccount = 0;
+        let currentLedgerEntryInAccount = 0;
+        let currentTrialRow = 0;
+        let currentAdjustment = 0;
+        let currentFinalRow = 0;
+
+        let journalSolutionHidden = false;
+        let trialSolutionHidden = false;
+        let finalSolutionHidden = false;
+
+        // تهيئة الصفحة
+        function init() {
+            loadProblemData();
+            loadJournalData();
+            createLedgerAccounts();
+            loadTrialData();
+            loadAdjustmentsData();
+            loadFinalTrialData();
+        }
+
+        // التنقل بين الأقسام
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // تحميل بيانات المسألة
+        function loadProblemData() {
+            const tbody = document.getElementById('problemBody');
+            problemData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'row-hidden';
+                tr.innerHTML = `
+                    <td>${item.no}</td>
+                    <td>${item.date}</td>
+                    <td style="text-align:right; padding-right:30px;">${item.text}</td>
+                `;
+                tbody.appendChild(tr);
+
+                const expTr = document.createElement('tr');
+                expTr.className = 'row-hidden';
+                expTr.innerHTML = `
+                    <td colspan="3">
+                        <div class="explanation">📌 ${item.explanation}</div>
+                    </td>
+                `;
+                tbody.appendChild(expTr);
+            });
+        }
+
+        function showNextProblemRow() {
+            const rows = document.getElementById('problemBody').getElementsByTagName('tr');
+            if (currentProblemRow < rows.length) {
+                rows[currentProblemRow].classList.remove('row-hidden');
+                rows[currentProblemRow].classList.add('row-visible');
+                currentProblemRow++;
+                if (currentProblemRow < rows.length) {
+                    rows[currentProblemRow].classList.remove('row-hidden');
+                    rows[currentProblemRow].classList.add('row-visible');
+                    currentProblemRow++;
+                }
+            }
+        }
+
+        function showAllProblemRows() {
+            const rows = document.getElementById('problemBody').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('row-hidden');
+                rows[i].classList.add('row-visible');
+            }
+            currentProblemRow = rows.length;
+        }
+
+        // تحميل بيانات اليومية
+        function loadJournalData() {
+            const tbody = document.getElementById('journalBody');
+            let lastNo = 0;
+            journalData.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'row-hidden';
+                tr.innerHTML = `
+                    <td>${item.no !== lastNo ? item.no : ''}</td>
+                    <td>${item.date}</td>
+                    <td style="text-align:right; padding-right:40px;">${item.desc}</td>
+                    <td class="solution-col">${item.debit}</td>
+                    <td class="solution-col">${item.credit}</td>
+                `;
+                tbody.appendChild(tr);
+                if (item.no !== lastNo) lastNo = item.no;
+            });
+
+            // إضافة صف الإجمالي
+            const totalTr = document.createElement('tr');
+            totalTr.className = 'row-hidden total-row';
+            totalTr.innerHTML = `
+                <td colspan="3">الإجمالي</td>
+                <td class="solution-col">279,400</td>
+                <td class="solution-col">279,400</td>
+            `;
+            tbody.appendChild(totalTr);
+        }
+
+        function showNextJournalEntry() {
+            const rows = document.getElementById('journalBody').getElementsByTagName('tr');
+            if (currentJournalEntry < rows.length) {
+                rows[currentJournalEntry].classList.remove('row-hidden');
+                rows[currentJournalEntry].classList.add('row-visible');
+                currentJournalEntry++;
+                // عرض السطر الثاني من القيد (إلى حـ/)
+                if (currentJournalEntry < rows.length - 1) {
+                    rows[currentJournalEntry].classList.remove('row-hidden');
+                    rows[currentJournalEntry].classList.add('row-visible');
+                    currentJournalEntry++;
+                }
+            }
+        }
+
+        function showAllJournalEntries() {
+            const rows = document.getElementById('journalBody').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('row-hidden');
+                rows[i].classList.add('row-visible');
+            }
+            currentJournalEntry = rows.length;
+        }
+
+        function toggleJournalSolution() {
+            journalSolutionHidden = !journalSolutionHidden;
+            const cols = document.querySelectorAll('#journalTable .solution-col');
+            cols.forEach(col => {
+                if (journalSolutionHidden) {
+                    col.classList.add('hidden-solution');
+                } else {
+                    col.classList.remove('hidden-solution');
+                }
+            });
+        }
+
+        // إنشاء حسابات دفتر الأستاذ
+        function createLedgerAccounts() {
+            const container = document.getElementById('ledgerAccounts');
+
+            Object.keys(ledgerAccounts).forEach(accountName => {
+                const account = ledgerAccounts[accountName];
+                const accountDiv = document.createElement('div');
+                accountDiv.className = 't-account';
+
+                let debitHTML = '<h4>مدين</h4>';
+                account.debit.forEach((entry, idx) => {
+                    debitHTML += `<div class="t-account-entry" data-account="${accountName}" data-side="debit" data-idx="${idx}">
+                        ${entry.date} - ${entry.desc}<br><strong>${entry.amount}</strong>
+                    </div>`;
+                });
+
+                let creditHTML = '<h4>دائن</h4>';
+                account.credit.forEach((entry, idx) => {
+                    creditHTML += `<div class="t-account-entry" data-account="${accountName}" data-side="credit" data-idx="${idx}">
+                        ${entry.date} - ${entry.desc}<br><strong>${entry.amount}</strong>
+                    </div>`;
+                });
+
+                accountDiv.innerHTML = `
+                    <div class="t-account-title">${accountName}</div>
+                    <div class="t-account-content">
+                        <div class="t-account-side debit">${debitHTML}
+                            <div class="t-account-balance">الرصيد: ${account.balance}</div>
+                        </div>
+                        <div class="t-account-side">${creditHTML}</div>
+                    </div>
+                `;
+
+                container.appendChild(accountDiv);
+            });
+        }
+
+        function postNextEntry() {
+            const allEntries = document.querySelectorAll('.t-account-entry');
+            const allBalances = document.querySelectorAll('.t-account-balance');
+
+            if (currentLedgerAccount < allEntries.length) {
+                allEntries[currentLedgerAccount].classList.add('visible');
+                currentLedgerAccount++;
+            } else if (currentLedgerAccount === allEntries.length && allBalances.length > 0) {
+                // عرض الأرصدة
+                allBalances.forEach(bal => bal.classList.add('visible'));
+                currentLedgerAccount++;
+            }
+        }
+
+        function postAllEntries() {
+            const allEntries = document.querySelectorAll('.t-account-entry');
+            const allBalances = document.querySelectorAll('.t-account-balance');
+
+            allEntries.forEach(entry => entry.classList.add('visible'));
+            allBalances.forEach(bal => bal.classList.add('visible'));
+
+            currentLedgerAccount = allEntries.length + 1;
+        }
+
+        // تحميل بيانات الميزان الأول
+        function loadTrialData() {
+            const tbody = document.getElementById('trialBody');
+            trialBalanceData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'row-hidden';
+                if (item.isTotal) tr.classList.add('total-row');
+                tr.innerHTML = `
+                    <td>${item.no}</td>
+                    <td style="text-align:right; padding-right:30px;">${item.account}</td>
+                    <td class="solution-col">${item.debit}</td>
+                    <td class="solution-col">${item.credit}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showNextTrialRow() {
+            const rows = document.getElementById('trialBody').getElementsByTagName('tr');
+            if (currentTrialRow < rows.length) {
+                rows[currentTrialRow].classList.remove('row-hidden');
+                rows[currentTrialRow].classList.add('row-visible');
+                currentTrialRow++;
+            }
+        }
+
+        function showAllTrialRows() {
+            const rows = document.getElementById('trialBody').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('row-hidden');
+                rows[i].classList.add('row-visible');
+            }
+            currentTrialRow = rows.length;
+        }
+
+        function toggleTrialSolution() {
+            trialSolutionHidden = !trialSolutionHidden;
+            const cols = document.querySelectorAll('#trialTable .solution-col');
+            cols.forEach(col => {
+                if (trialSolutionHidden) {
+                    col.classList.add('hidden-solution');
+                } else {
+                    col.classList.remove('hidden-solution');
+                }
+            });
+        }
+
+        // تحميل التسويات
+        function loadAdjustmentsData() {
+            const container = document.getElementById('adjustmentsContent');
+            adjustmentsData.forEach((adj, index) => {
+                const card = document.createElement('div');
+                card.className = 'adjustment-card';
+                card.innerHTML = `
+                    <div class="adjustment-title">${adj.title}</div>
+                    <div class="adjustment-explanation">${adj.explanation}</div>
+                    <div class="adjustment-entry"><strong>قيد التسوية:</strong><br>${adj.entry}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showNextAdjustment() {
+            const cards = document.querySelectorAll('.adjustment-card');
+            if (currentAdjustment < cards.length) {
+                cards[currentAdjustment].classList.add('visible');
+                currentAdjustment++;
+            }
+        }
+
+        function showAllAdjustments() {
+            const cards = document.querySelectorAll('.adjustment-card');
+            cards.forEach(card => card.classList.add('visible'));
+            currentAdjustment = cards.length;
+        }
+
+        // تحميل الميزان النهائي
+        function loadFinalTrialData() {
+            const tbody = document.getElementById('finalTrialBody');
+            finalTrialData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'row-hidden';
+                tr.innerHTML = `
+                    <td>${item.no}</td>
+                    <td style="text-align:right; padding-right:30px;">${item.account}</td>
+                    <td class="solution-col">${item.before}</td>
+                    <td class="solution-col">${item.adjDebit}</td>
+                    <td class="solution-col">${item.adjCredit}</td>
+                    <td class="solution-col">${item.after}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showNextFinalRow() {
+            const rows = document.getElementById('finalTrialBody').getElementsByTagName('tr');
+            if (currentFinalRow < rows.length) {
+                rows[currentFinalRow].classList.remove('row-hidden');
+                rows[currentFinalRow].classList.add('row-visible');
+                currentFinalRow++;
+            }
+        }
+
+        function showAllFinalRows() {
+            const rows = document.getElementById('finalTrialBody').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('row-hidden');
+                rows[i].classList.add('row-visible');
+            }
+            currentFinalRow = rows.length;
+        }
+
+        function toggleFinalSolution() {
+            finalSolutionHidden = !finalSolutionHidden;
+            const cols = document.querySelectorAll('#finalTrialTable .solution-col');
+            cols.forEach(col => {
+                if (finalSolutionHidden) {
+                    col.classList.add('hidden-solution');
+                } else {
+                    col.classList.remove('hidden-solution');
+                }
+            });
+        }
+
+        // تهيئة عند تحميل الصفحة
+        window.onload = init;
+    </script>
+</body>
+</html>
