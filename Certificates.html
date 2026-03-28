@@ -18,11 +18,12 @@
             margin: 0;
             background-color: var(--secondary-color);
             color: var(--text-dark);
+            line-height: 1.6;
         }
 
         header {
             background: white;
-            padding: 2.5rem 1rem;
+            padding: 3rem 1rem;
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
         }
@@ -38,70 +39,76 @@
         }
 
         .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
         }
 
-        .section-title {
+        .section-header {
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin: 3rem 0 1.5rem;
             color: var(--primary-color);
-            border-left: 4px solid var(--accent-color);
-            padding-left: 12px;
-            margin: 2.5rem 0 1.5rem;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
         }
 
+        /* Grid System */
         .cert-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
 
         .cert-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid #ddd;
-            transition: 0.3s ease;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #eee;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .cert-card:hover {
-            border-color: var(--accent-color);
             transform: translateY(-3px);
+            border-color: var(--accent-color);
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .cert-card i {
             font-size: 2rem;
             color: var(--primary-color);
-            margin-bottom: 12px;
         }
 
-        .cert-card span {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #444;
+        .cert-info h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--text-dark);
         }
 
-        /* Preview Modal */
+        .cert-info p {
+            margin: 2px 0 0;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Modal Preview */
         .modal {
             display: none;
             position: fixed;
             z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
         }
 
         .modal-content {
-            width: 90%; height: 85%;
-            margin: 2% auto;
-            background: white;
             position: relative;
+            background: white;
+            margin: 2% auto;
+            width: 85%; height: 90%;
             border-radius: 8px;
             overflow: hidden;
         }
@@ -109,70 +116,110 @@
         .close-btn {
             position: absolute;
             top: 10px; right: 20px;
-            color: white; font-size: 30px; cursor: pointer;
-            z-index: 1001;
+            color: white; font-size: 30px;
+            cursor: pointer; z-index: 1001;
         }
 
         iframe { width: 100%; height: 100%; border: none; }
+
+        @media (max-width: 600px) {
+            .modal-content { width: 95%; height: 80%; margin: 10% auto; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
-        <h1>Certificates Portfolio</h1>
-        <p>Click to view full certificate details</p>
+        <h1>Professional Certificates</h1>
+        <p>Verified academic and professional achievements</p>
     </header>
 
     <div class="container">
         
-        <h2 class="section-title">CIB Partnership Certificates</h2>
+        <h2 class="section-header">General Certificates</h2>
         <div class="cert-grid">
-            <div class="cert-card" onclick="openPDF('الشهادات/CIB/اسم_الملف_هنا.pdf')">
-                <i class="fas fa-university"></i>
-                <span>Banking Operations</span>
+            <div class="cert-card" onclick="openCert('الشهادات/Principles of Finance.pdf')">
+                <i class="fas fa-file-pdf"></i>
+                <div class="cert-info"><h3>Principles of Finance</h3><p>PDF Document</p></div>
+            </div>
+
+            <div class="cert-card" onclick="openCert('الشهادات/Credit in Banks.pdf')">
+                <i class="fas fa-file-pdf"></i>
+                <div class="cert-info"><h3>Credit in Banks</h3><p>PDF Document</p></div>
+            </div>
+
+            <div class="cert-card" onclick="openCert('الشهادات/Banque Misr.pdf')">
+                <i class="fas fa-file-pdf"></i>
+                <div class="cert-info"><h3>Banque Misr</h3><p>PDF Document</p></div>
+            </div>
+
+            <div class="cert-card" onclick="openCert('الشهادات/Analysis of Profits & Losses Statement.pdf')">
+                <i class="fas fa-file-pdf"></i>
+                <div class="cert-info"><h3>Analysis of Profits & Losses</h3><p>PDF Document</p></div>
             </div>
         </div>
 
-        <h2 class="section-title">General Certificates</h2>
+        <h2 class="section-header">CIB Partnership (HR Learning & Development)</h2>
         <div class="cert-grid">
-            <div class="cert-card" onclick="openPDF('الشهادات/ICDL.pdf')">
-                <i class="fas fa-award"></i>
-                <span>ICDL Certificate</span>
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate.pdf')">
+                <i class="fas fa-university"></i>
+                <div class="cert-info"><h3>HR L&D Certificate</h3><p>CIB Program</p></div>
             </div>
-            <div class="cert-card" onclick="openPDF('الشهادات/Accounting_Basics.pdf')">
-                <i class="fas fa-calculator"></i>
-                <span>Accounting Principles</span>
+
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (1).pdf')">
+                <i class="fas fa-university"></i>
+                <div class="cert-info"><h3>HR L&D (Part 1)</h3><p>CIB Program</p></div>
+            </div>
+
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (2).pdf')">
+                <i class="fas fa-university"></i>
+                <div class="cert-info"><h3>HR L&D (Part 2)</h3><p>CIB Program</p></div>
+            </div>
+
+            <div class="cert-card" onclick="openCert('الشهادات/CIB/HR Learning & Development Certificate (3).pdf')">
+                <i class="fas fa-university"></i>
+                <div class="cert-info"><h3>HR L&D (Part 3)</h3><p>CIB Program</p></div>
             </div>
         </div>
 
     </div>
 
-    <div id="pdfModal" class="modal">
-        <span class="close-btn" onclick="closePDF()">&times;</span>
+    <div id="certModal" class="modal">
+        <span class="close-btn" onclick="closeCert()">&times;</span>
         <div class="modal-content">
-            <iframe id="pdfFrame" src=""></iframe>
+            <iframe id="certFrame" src=""></iframe>
         </div>
     </div>
 
     <script>
-        function openPDF(path) {
-            document.getElementById('pdfFrame').src = path + "#toolbar=0";
-            document.getElementById('pdfModal').style.display = "block";
-            document.body.style.overflow = "hidden";
-        }
-        function closePDF() {
-            document.getElementById('pdfModal').style.display = "none";
-            document.getElementById('pdfFrame').src = "";
-            document.body.style.overflow = "auto";
-        }
-        window.onclick = function(e) {
-            if (e.target.className == 'modal') closePDF();
-        }
+    function openCert(path) {
+        const modal = document.getElementById('certModal');
+        const iframe = document.getElementById('certFrame');
+        
+        // encodeURI عشان يتعامل مع المسافات والأقواس واللغة العربية في المسار صح
+        const encodedPath = encodeURI(path);
+        
+        iframe.src = encodedPath + "#toolbar=0&navpanes=0";
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeCert() {
+        const modal = document.getElementById('certModal');
+        document.getElementById('certFrame').src = "";
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('certModal');
+        if (event.target == modal) closeCert();
+    }
     </script>
 
     <footer>
-        <p style="text-align:center; color:#999; margin-top:4rem;">&copy; 2026 Ahmed Mohalhal</p>
+        &copy; 2026 Ahmed Mohalhal | Accounting & Automation Portfolio
     </footer>
 
 </body>
