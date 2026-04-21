@@ -236,8 +236,7 @@
             const iframe = document.getElementById('excelFrame');
             
             // تحويل المسار لرابط كامل (Absolute URL) لمتصفح أوفيس أونلاين
-            const fullUrl = window.location.origin + window.location.pathname.replace('Excels.html', '') + encodeURI(path);
-            
+            const fullUrl = window.location.href.replace('Excels.html', '') + encodeURI(path);                  
             // استخدام Microsoft Office Viewer لعرض الملف
             iframe.src = "https://view.officeapps.live.com/op/embed.aspx?src=" + fullUrl;
             
