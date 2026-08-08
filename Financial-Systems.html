@@ -345,11 +345,11 @@
 
             <div class="system-card">
                 <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
-                <h3>نموذج العمل التجاري TAZWEED</h3>
-                <p>نموذج العمل التجاري لمشروع TAZWEED HUB (باللغة العربية)</p>
+                <h3>TAZWEED Business Model</h3>
+                <p>Comprehensive business model documentation for the TAZWEED HUB project.</p>
                 <div class="btn-group">
-                    <button class="launch-btn" onclick="openPDF('Financial Systems/نموذج العمل التجاري لمشروع TAZWEED HUB.pdf')" style="flex: 1;">عرض <i class="fas fa-eye"></i></button>
-                    <a href="Financial Systems/نموذج العمل التجاري لمشروع TAZWEED HUB.pdf" class="download-btn" style="flex: 1;" download>تحميل <i class="fas fa-download"></i></a>
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/نموذج العمل التجاري لمشروع TAZWEED HUB.pdf')" style="flex: 1;">View <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/نموذج العمل التجاري لمشروع TAZWEED HUB.pdf" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
                 </div>
             </div>
 
@@ -413,7 +413,7 @@
             modal.style.display = "block";
             document.body.style.overflow = "hidden";
             
-            container.innerHTML = '<div class="loading-text">جاري تحميل المستند...</div>';
+            container.innerHTML = '<div class="loading-text">Loading document...</div>';
 
             try {
                 const loadingTask = pdfjsLib.getDocument(encodeURI(path));
@@ -440,7 +440,7 @@
                 }
             } catch (error) {
                 console.error('Error loading PDF:', error);
-                container.innerHTML = '<div class="loading-text" style="color: #ff6b6b;">عذراً، تعذر عرض الملف. يرجى محاولة التحميل.</div>';
+                container.innerHTML = '<div class="loading-text" style="color: #ff6b6b;">Unable to load the document. Please try downloading it instead.</div>';
             }
         }
 
