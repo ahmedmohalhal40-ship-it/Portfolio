@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Systems | Ahmed Mohalhal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         :root {
             --primary-dark: #0f172a;
@@ -42,6 +43,21 @@
             max-width: 1200px;
             margin: -2rem auto 4rem;
             padding: 0 20px;
+        }
+
+        .section-divider {
+            margin: 4rem 0 2rem 0;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .section-divider h2 {
+            margin: 0 0 1rem 0;
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .systems-grid {
@@ -91,7 +107,7 @@
             line-height: 1.5;
         }
 
-        .launch-btn {
+        .launch-btn, .download-btn {
             margin-top: 1.5rem;
             background: var(--primary-dark);
             color: white;
@@ -105,10 +121,103 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            border: none;
+            cursor: pointer;
         }
 
-        .launch-btn:hover {
+        .launch-btn:hover, .download-btn:hover {
             background: var(--accent-blue);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .btn-group .download-btn {
+            flex: 1;
+            margin-top: 0;
+            background: #64748b;
+        }
+
+        .btn-group .launch-btn {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        .btn-group .launch-btn:hover {
+            background: var(--accent-blue);
+        }
+
+        .btn-group .download-btn:hover {
+            background: #475569;
+        }
+
+        /* Modal for PDF Viewer */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            position: relative;
+            background: #444;
+            margin: 1% auto;
+            width: 90%;
+            height: 95%;
+            border-radius: 8px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-header {
+            width: 100%;
+            background: #222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .close-btn {
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        #pdf-container {
+            width: 100%;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        canvas {
+            max-width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: white;
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 50px;
+            font-size: 1.2rem;
         }
 
         footer {
@@ -120,6 +229,9 @@
         @media (max-width: 600px) {
             header { padding: 3rem 1rem 5rem; }
             .container { margin-top: -3rem; }
+            .btn-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -132,6 +244,10 @@
     </header>
 
     <div class="container">
+        <!-- Interactive Web Systems Section -->
+        <div class="section-divider">
+            <h2><i class="fas fa-globe"></i> Interactive Web Systems</h2>
+        </div>
         <div class="systems-grid">
             
             <div class="system-card">
@@ -170,11 +286,207 @@
             </div>
 
         </div>
+
+        <!-- Projects & Research Section -->
+        <div class="section-divider">
+            <h2><i class="fas fa-folder-open"></i> Projects & Research Documents</h2>
+        </div>
+        <div class="systems-grid">
+            
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+                <h3>Final Project</h3>
+                <p>Comprehensive final project documentation and analysis report.</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/Final Project.pdf')" style="flex: 1;">View <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/Final Project.pdf" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+                <h3>FinalProject FSA411 CBA</h3>
+                <p>Financial Statement Analysis 411 - CBA project documentation (April 2026).</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/FinalProjectFSA411_CBA_April 20 2026 (1).pdf')" style="flex: 1;">View <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/FinalProjectFSA411_CBA_April 20 2026 (1).pdf" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-excel"></i></div>
+                <h3>QCC FIN309 Model</h3>
+                <p>Financial modeling spreadsheet for FIN309 course - Advanced financial calculations and analysis.</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="previewExcel('Financial Systems/QCC_FIN309_Model.xlsx')" style="flex: 1;">Preview <i class="fas fa-chart-line"></i></button>
+                    <a href="Financial Systems/QCC_FIN309_Model.xlsx" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+                <h3>Green Minimalist Business Model Canvas</h3>
+                <p>Business model canvas brainstorm using green minimalist design approach.</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/Green Minimalist Business Model Canvas Brainstorm.pdf')" style="flex: 1;">View <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/Green Minimalist Business Model Canvas Brainstorm.pdf" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+                <h3>TAZWEED HUB Project</h3>
+                <p>Complete project proposal and business model for TAZWEED HUB initiative.</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/TAZWEED-HUB.pdf')" style="flex: 1;">View <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/TAZWEED-HUB.pdf" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+                <h3>نموذج العمل التجاري TAZWEED</h3>
+                <p>نموذج العمل التجاري لمشروع TAZWEED HUB (باللغة العربية)</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/نموذج العمل التجاري لمشروع TAZWEED HUB.pdf')" style="flex: 1;">عرض <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/نموذج العمل التجاري لمشروع TAZWEED HUB.pdf" class="download-btn" style="flex: 1;" download>تحميل <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+            <div class="system-card">
+                <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+                <h3>The Autonomous Mobility Future</h3>
+                <p>Research paper on the future of autonomous mobility and transportation systems.</p>
+                <div class="btn-group">
+                    <button class="launch-btn" onclick="openPDF('Financial Systems/The Autonomous Mobility Future.pdf')" style="flex: 1;">View <i class="fas fa-eye"></i></button>
+                    <a href="Financial Systems/The Autonomous Mobility Future.pdf" class="download-btn" style="flex: 1;" download>Download <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modalTitle">Document Viewer</span>
+                <span class="close-btn" onclick="closePDF()">&times;</span>
+            </div>
+            <div id="pdf-container">
+                <div class="loading-text">Loading document...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Excel Preview Modal -->
+    <div id="excelModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="excelTitle">Excel Preview</span>
+                <span class="close-btn" onclick="closeExcel()">&times;</span>
+            </div>
+            <iframe id="excelFrame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
     </div>
 
     <footer>
         &copy; 2026 Ahmed Mohalhal | Fintech & Accounting Integration
     </footer>
+
+    <script>
+        // PDF.js Configuration
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let currentPdf = null;
+
+        // Open PDF Viewer
+        async function openPDF(path) {
+            const modal = document.getElementById('pdfModal');
+            const container = document.getElementById('pdf-container');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            const fileName = path.split('/').pop().replace('.pdf', '');
+            modalTitle.innerText = fileName;
+
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+            
+            container.innerHTML = '<div class="loading-text">جاري تحميل المستند...</div>';
+
+            try {
+                const loadingTask = pdfjsLib.getDocument(encodeURI(path));
+                currentPdf = await loadingTask.promise;
+                
+                container.innerHTML = '';
+
+                for (let pageNum = 1; pageNum <= currentPdf.numPages; pageNum++) {
+                    const page = await currentPdf.getPage(pageNum);
+                    const viewport = page.getViewport({ scale: 1.5 });
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    container.appendChild(canvas);
+                    await page.render(renderContext).promise;
+                }
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                container.innerHTML = '<div class="loading-text" style="color: #ff6b6b;">عذراً، تعذر عرض الملف. يرجى محاولة التحميل.</div>';
+            }
+        }
+
+        // Close PDF Viewer
+        function closePDF() {
+            const modal = document.getElementById('pdfModal');
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+            document.getElementById('pdf-container').innerHTML = '';
+            if (currentPdf) {
+                currentPdf.destroy();
+                currentPdf = null;
+            }
+        }
+
+        // Preview Excel File
+        function previewExcel(path) {
+            const modal = document.getElementById('excelModal');
+            const iframe = document.getElementById('excelFrame');
+            const excelTitle = document.getElementById('excelTitle');
+            
+            const fileName = path.split('/').pop().replace('.xlsx', '');
+            excelTitle.innerText = fileName;
+            
+            const fullUrl = window.location.href.replace('Financial-Systems.html', '') + encodeURI(path);
+            iframe.src = "https://view.officeapps.live.com/op/embed.aspx?src=" + fullUrl;
+            
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+
+        // Close Excel Preview
+        function closeExcel() {
+            document.getElementById('excelModal').style.display = "none";
+            document.getElementById('excelFrame').src = "";
+            document.body.style.overflow = "auto";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const pdfModal = document.getElementById('pdfModal');
+            const excelModal = document.getElementById('excelModal');
+            if (event.target === pdfModal) closePDF();
+            if (event.target === excelModal) closeExcel();
+        }
+    </script>
 
 </body>
 </html>
