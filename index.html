@@ -185,6 +185,106 @@
             margin: 0;
         }
 
+        .gallery-section {
+            max-width: 1100px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border: none;
+            padding: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            background: transparent;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+            aspect-ratio: 4 / 3;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .gallery-item::after {
+            content: 'Preview';
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            background: rgba(17, 24, 39, 0.72);
+            color: #fff;
+            font-size: 0.72rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 15, 23, 0.82);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 1000;
+        }
+
+        .lightbox.open {
+            display: flex;
+        }
+
+        .lightbox-inner {
+            position: relative;
+            max-width: min(1000px, 92vw);
+            max-height: 92vh;
+        }
+
+        .lightbox-image {
+            display: block;
+            width: 100%;
+            max-height: 86vh;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #000;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1f2937;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         footer {
             text-align: center;
             padding: 3rem 0;
@@ -233,9 +333,9 @@
 
     <div class="container">
         <h2 class="section-title">Professional Portfolio</h2>
-        
+
         <div class="portfolio-grid">
-            
+
             <a href="websites.html" class="card">
                 <i class="fas fa-laptop-code"></i>
                 <h3>Websites</h3>
@@ -260,12 +360,89 @@
                 <p>Accounting frameworks and auditing tools.</p>
             </a>
 
+            <a href="#gdansk-gallery" class="card">
+                <i class="fas fa-university"></i>
+                <h3>Gdansk Scholarship</h3>
+                <p>University of Gdańsk memories and scholarship moments.</p>
+            </a>
+
+        </div>
+    </div>
+
+    <section class="gallery-section" id="gdansk-gallery">
+        <h2 class="section-title">Gdansk Scholarship</h2>
+        <div class="gallery-grid">
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-16-54.jpg" aria-label="Open scholarship photo 1">
+                <img src="Gdansk/photo_2026-10-28_21-16-54.jpg" alt="University of Gdańsk scholarship photo 1">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-16-57.jpg" aria-label="Open scholarship photo 2">
+                <img src="Gdansk/photo_2026-10-28_21-16-57.jpg" alt="University of Gdańsk scholarship photo 2">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-16-59.jpg" aria-label="Open scholarship photo 3">
+                <img src="Gdansk/photo_2026-10-28_21-16-59.jpg" alt="University of Gdańsk scholarship photo 3">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-17-02.jpg" aria-label="Open scholarship photo 4">
+                <img src="Gdansk/photo_2026-10-28_21-17-02.jpg" alt="University of Gdańsk scholarship photo 4">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-17-04.jpg" aria-label="Open scholarship photo 5">
+                <img src="Gdansk/photo_2026-10-28_21-17-04.jpg" alt="University of Gdańsk scholarship photo 5">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-17-06.jpg" aria-label="Open scholarship photo 6">
+                <img src="Gdansk/photo_2026-10-28_21-17-06.jpg" alt="University of Gdańsk scholarship photo 6">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-17-08.jpg" aria-label="Open scholarship photo 7">
+                <img src="Gdansk/photo_2026-10-28_21-17-08.jpg" alt="University of Gdańsk scholarship photo 7">
+            </button>
+            <button class="gallery-item" type="button" data-image="Gdansk/photo_2026-10-28_21-17-10.jpg" aria-label="Open scholarship photo 8">
+                <img src="Gdansk/photo_2026-10-28_21-17-10.jpg" alt="University of Gdańsk scholarship photo 8">
+            </button>
+        </div>
+    </section>
+
+    <div class="lightbox" id="photo-preview" aria-hidden="true">
+        <div class="lightbox-inner">
+            <button class="lightbox-close" type="button" aria-label="Close preview">&times;</button>
+            <img class="lightbox-image" id="lightbox-image" src="" alt="Scholarship photo preview">
         </div>
     </div>
 
     <footer>
         &copy; 2026 Ahmed Mohalhal. All rights reserved.
     </footer>
+
+    <script>
+        const preview = document.getElementById('photo-preview');
+        const previewImage = document.getElementById('lightbox-image');
+        const closeButton = document.querySelector('.lightbox-close');
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', () => {
+                previewImage.src = item.dataset.image;
+                preview.classList.add('open');
+                preview.setAttribute('aria-hidden', 'false');
+            });
+        });
+
+        function closePreview() {
+            preview.classList.remove('open');
+            preview.setAttribute('aria-hidden', 'true');
+            previewImage.src = '';
+        }
+
+        closeButton.addEventListener('click', closePreview);
+
+        preview.addEventListener('click', (event) => {
+            if (event.target === preview) {
+                closePreview();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && preview.classList.contains('open')) {
+                closePreview();
+            }
+        });
+    </script>
 
 </body>
 </html>
