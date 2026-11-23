@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=0.5">
+    <title>Interactive Accounting Equation Balance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(115deg, #f3f7fa 59%, #f1edfc 100%);
+            color: #292c36;
+            margin: 0;
+            padding: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: left;
+        }
+        .container {
+            max-width: 1040px;
+            width: 93%;
+            margin: 0 auto;
+            background: linear-gradient(120deg,#fff 65%, #fcf3e6 100%);
+            padding: 42px 30px 28px;
+            border-radius: 20px;
+            box-shadow: 0 16px 47px rgba(0, 67, 93, 0.13), 0 2px 16px #c662ee33;
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            height: 8px; width: 150px;
+            background: linear-gradient(90deg, #f42e6b 0%, #f9a825 80%);
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 4px 22px #f9a82526;
+        }
+        h1 {
+            color: #273e59; 
+            text-align: center;
+            margin-bottom: 38px;
+            font-weight: 800;
+            font-size: 2.24em;
+            border-bottom: 3.5px solid #f9a825; 
+            display: inline-block;
+            padding-bottom: 9px;
+            letter-spacing: 1.1px;
+            background: #fcf7ec6c;
+            border-radius: 0 0 14px 14px;
+            box-shadow: 0 2px 11px #ffe4b1a3;
+        }
+        .balance-scale {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            margin-bottom: 44px;
+            gap: 26px;
+        }
+        .scale-arm {
+            width: 45%; 
+            padding: 23px 17px 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 32px rgba(22,47,43,0.09);
+            background: linear-gradient(97deg, #f6fcff 74%, #f1f5fa 100%);
+            border: 2px solid #e0e8ec;
+            transition: box-shadow 0.28s;
+        }
+        .assets-side {
+            background: linear-gradient(105deg, #e4fafd 89%, #fff 100%);
+            border: 2px solid #273e59;
+            margin-right: -10px;
+        }
+        .equity-liabilities-side {
+            background: linear-gradient(97deg, #fdfaec 65%, #fff 100%);
+            border: 2px solid #f9a825;
+            margin-left: -10px;
+        }
+        .scale-arm:hover { box-shadow: 0 7px 34px #6cacee1a; }
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 2px solid;
+            padding-bottom: 7px;
+            margin-bottom: 13px;
+            font-weight: 800;
+            font-size: 1.13em;
+            letter-spacing: 1px;
+            background: linear-gradient(95deg,#f7fefc 77%, #ffecd7 100%);
+            border-radius: 6px;
+        }
+        .assets-side h2 { color: #2964ab; border-color: #273e59; }
+        .equity-liabilities-side h2 { color: #f9a825; border-color: #f9a825; }
+        .account-list p {
+            background: linear-gradient(90deg, #e4fafd 54%, #ebe1f6 100%);
+            padding: 12px 14px;
+            margin: 7px 0 11px 0;
+            border-radius: 10px;
+            font-size: 1.09em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px #c662ee24;
+            border: 1.5px solid #f9a82544;
+            transition: background 0.23s, box-shadow 0.25s;
+        }
+        .account-list p:hover {
+            background: linear-gradient(90deg,#fcf3e6 20%, #e9efff 83%);
+            box-shadow: 0 8px 22px #f42e6b1c;
+            border: 2.5px solid #f42e6b77;
+        }
+        #acc_depreciation, #withdrawals, #expenses, #rent_expense {
+            color: #ce3054;
+            font-weight: bold;
+        }
+        .total-box {
+            margin-top: 18px;
+            padding: 16px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.26em;
+            border: 3px solid;
+            border-radius: 12px;
+            background: #f5fbfa;
+            box-shadow: 0 4px 18px #c662ee14;
+        }
+        .assets-side .total-box { border-color: #273e59; background: #c6dbfa33; }
+        .equity-liabilities-side .total-box { border-color: #f9a825; background: #fff0ce; }
+        .balance-status {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 1.17em;
+            padding: 11px 0;
+            border-radius: 7px;
+            background: #e4fafd;
+            color: #2964ab;
+            box-shadow: 0 1px 8px #c662ee14;
+            transition: background 0.22s, color 0.22s;
+        }
+        .transaction-section {
+            padding: 32px 20px 26px;
+            border: none;
+            border-radius: 14px;
+            margin-top: 41px;
+            background: linear-gradient(110deg, #f7f9fc 80%, #fff0f6 100%);
+            box-shadow: 0 6px 24px #f42e6b0d, 0 2px 8px #f9a82516;
+            position: relative;
+        }
+        .transaction-section h2 {
+            color: #2964ab;
+            font-weight: 800;
+            margin-bottom: 18px;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 1.02em;
+            letter-spacing: 0.5px;
+        }
+        .transaction-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+            margin-bottom: 22px;
+            align-items: center;
+        }
+        .input-group {
+            grid-column: 1 / 3; 
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .input-group select,
+        .input-group input[type="number"],
+        #dynamic-options select {
+            padding: 12px 11px;
+            border: 2px solid #e9e4f8;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 1.02em;
+            font-family: 'Tajawal', sans-serif;
+            transition: border 0.22s, box-shadow 0.21s;
+            box-shadow: 0 1px 6px #c662ee1c;
+        }
+        .input-group select:focus,
+        .input-group input[type="number"]:focus,
+        #dynamic-options select:focus {
+            border-color: #673ab7;
+            outline: none;
+            box-shadow: 0 0 8px #c662ee25;
+        }
+        .transaction-section button {
+            background: linear-gradient(90deg, #f9a825 72%, #e14d91 100%);
+            color: #fff;
+            padding: 13px 17px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.09em;
+            font-weight: 800;
+            box-shadow: 0 4px 12px #c662ee31;
+            margin-top: 7px;
+            transition: background 0.22s, color 0.22s, box-shadow 0.19s, transform 0.08s;
+        }
+        .transaction-section button:hover {
+            background: linear-gradient(90deg, #2964ab 41%, #e14d91 100%);
+            color: #fff;
+            box-shadow: 0 10px 32px #2964ab16;
+            transform: translateY(-2px) scale(1.05);
+        }
+        #transaction-explanation {
+            margin-top: 25px;
+            padding: 17px 10px;
+            border-radius: 13px;
+            background-color: #f7f9fc;
+            border: none;
+            box-shadow: 0 2px 13px #c662ee15;
+            display: grid; grid-template-columns: 1fr 2fr; gap: 15px; align-items: stretch;
+        }
+        #transaction-explanation > div {
+            padding: 13px 7px 14px 8px;
+            border-radius: 8px;
+            box-shadow: 0 1px 7px #e14d911f;
+            background: #fff;
+            min-height: 72px;
+        }
+        #result-message {
+            background: #ffeaf6;
+            color: #e14d91;
+            font-weight: 800;
+            font-size: 1.09em;
+            border-left: 4.5px solid #e14d91;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.38;
+            transition: background 0.22s, color 0.22s;
+        }
+        .journal-entry {
+            margin-top: 15px;
+            padding: 11px;
+            border: 1.5px dashed #e14d91;
+            border-radius: 9px;
+            background: #fdfaec;
+            font-size: 1.01em;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 11px #c662ee2b;
+        }
+        .entry-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dotted #f9a82599;
+            align-items: center;
+        }
+        .entry-line:last-child { border-bottom: none; }
+        .credit-line { padding-left: 22px; }
+        .account-name { flex-basis: 69%; text-align: left;}
+        .amount-value { flex-basis: 31%; text-align: right; direction: ltr; color: #2964ab;}
+        @media (max-width: 900px) {
+            .container { padding: 12px; width: 100%; border-radius: 0;}
+            .balance-scale { flex-direction: column; margin-bottom: 20px; gap: 0; }
+            .scale-arm { width: 100%; margin: 0 0 18px 0; }
+        }
+        @media (max-width: 650px) {
+            #transaction-explanation { grid-template-columns: 1fr; padding: 11px; gap: 7px; }
+            #transaction-explanation>div{ min-height: auto;}
+            #result-message {border-left: none; border-bottom: 3px solid #e14d91;}
+            .container {padding: 6px;}
+        }
+
+        /* Start of mini numeric keypad */
+        .numeric-keyboard-wrapper {
+            position: relative;
+        }
+        .numeric-keyboard {
+            position: absolute;
+            top: 44px;
+            left: 0;
+            z-index: 100;
+            background: #fff;
+            border: 2px solid #e14d91;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px #e14d9140;
+            padding: 12px 8px 8px;
+            display: none; /* shown when the field is focused */
+            grid-template-columns: repeat(3, 38px);
+            gap: 7px;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .numeric-keyboard button {
+            font-size: 1.1em;
+            padding: 8px 0;
+            background: #f9a825;
+            color: #273e59;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.18s, color 0.18s;
+        }
+        .numeric-keyboard button:active {
+            background: #e14d91;
+            color: #fff;
+        }
+        @media (max-width:650px) {
+            .numeric-keyboard {
+                top: 39px;
+                left: 0;
+                grid-template-columns: repeat(3, 29px);
+                padding: 10px 5px 5px;
+            }
+            .numeric-keyboard button {
+                font-size: 1em;
+                padding: 6px 0;
+            }
+        }
+        /* End of mini numeric keypad */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Accounting Equation Balance ⚖️</h1>
+        <div class="balance-scale">
+            <div id="left-arm" class="scale-arm assets-side">
+                <h2>Assets</h2>
+                <div id="assets-list" class="account-list">
+                    <p>💰 Cash: <span id="cash">0</span></p>
+                    <p>💵 Customers: <span id="debtors">0</span></p>
+                    <p>📝 Notes Receivable: <span id="notes_receivable">0</span></p> 
+                    <p>📦 Inventory: <span id="inventory">0</span></p>
+                    <p>🧾 Prepaid Expenses: <span id="prepaid_expense">0</span></p>
+                    <p>🛠️ Equipment: <span id="equipment">0</span></p>
+                    <p>🛋️ Furniture: <span id="furniture">0</span></p>
+                    <p>🏢 Buildings: <span id="buildings">0</span></p> 
+                    <p>🗺️ Land: <span id="land">0</span></p> 
+                    <p>🔻 Accumulated Depreciation: <span id="acc_depreciation">0</span></p>
+                </div>
+                <div class="total-box">
+                    Total: <span id="total-assets">0</span>
+                </div>
+            </div>
+            <div id="right-arm" class="scale-arm equity-liabilities-side">
+                <h2>Liabilities and Equity</h2>
+                <div id="liabilities-equity-list" class="account-list">
+                    <p>🧾 Suppliers: <span id="suppliers">0</span></p>
+                    <p>📜 Notes Payable: <span id="notes_payable">0</span></p> 
+                    <p>🏦 Loans: <span id="bank_loan">0</span></p>
+                    <p>💸 Wages Payable: <span id="wages_payable">0</span></p>
+                    <p>💼 Unearned Revenue: <span id="unearned_revenue">0</span></p> 
+                    <hr style="border-top: 1px solid #f9a825; margin: 10px 0;">
+                    <p>💼 Capital: <span id="capital">0</span></p>
+                    <p>➖ Withdrawals: <span id="withdrawals">0</span></p> 
+                    <hr style="border-top: 1px solid #f9a825; margin: 10px 0;">
+                    <p>📈 Revenue (General): <span id="revenue">0</span></p>
+                    <p>💵 Interest Revenue: <span id="interest_revenue">0</span></p> 
+                    <p>📉 Expenses (General): <span id="expenses">0</span></p>
+                    <p>🏠 Rent Expense: <span id="rent_expense">0</span></p> 
+                </div>
+                <div class="total-box">
+                    Total: <span id="total-liabilities-equity">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="balance-bar-container">
+            <p id="balance-status" class="balance-status">Equation status: <strong>Balanced</strong></p>
+        </div>
+        <div class="transaction-section card">
+            <h2>Add a New Transaction</h2>
+            <div class="transaction-controls">
+                <div class="input-group">
+                    <select id="transaction-type" onchange="updateTransactionOptions()">
+                        <option value="">-- Select transaction type --</option>
+                        <option value="capital_injection">1. Capital injection (Cash / Capital)</option>
+                        <option value="buy_asset">2. Buy equipment (cash/credit)</option>
+                        <option value="buy_furniture">3. Buy furniture (cash/credit)</option>
+                        <option value="buy_inventory">4. Buy inventory (cash/credit)</option>
+                        <option value="reduce_capital">5. Reduce capital</option>
+                        <option value="provide_service">6. Provide service / sell (cash/credit)</option>
+                        <option value="pay_expense">7. Pay expenses (cash/accrued)</option>
+                        <option value="purchase_land_bankloan">8. Buy land with a bank loan 🏦</option>
+                        <option value="receive_cash_unearned">9. Receive cash in advance for a future service (unearned revenue)</option>
+                        <option value="issue_note_payable">10. Issue a note payable to suppliers (debt swap)</option>
+                        <option value="owner_withdrawal">11. Owner personal withdrawals</option>
+                        <option value="collect_debt">12. Collect from customers (settlement)</option>
+                        <option value="pay_supplier">13. Pay suppliers (settlement)</option>
+                        <option value="record_depreciation">14. Record depreciation (non-cash)</option>
+                    </select>
+                </div>
+                <div class="input-group" id="dynamic-options"></div>
+                <div class="input-group">
+                  <!-- Start of numeric keypad -->
+                  <div class="numeric-keyboard-wrapper" style="position: relative;">
+                    <input type="number" id="amount" placeholder="Enter amount" min="1"
+                      onfocus="showNumericKeyboard()" autocomplete="off">
+                    <div id="numeric-keyboard" class="numeric-keyboard" style="display: none;" dir="ltr"></div>
+                  </div>
+                  <!-- End of numeric keypad -->
+                </div>
+            </div>
+            <button onclick="addTransaction()">Execute and Explain</button>
+            <div id="transaction-explanation">
+                <div id="result-message">
+                    <strong>Result:</strong><br>
+                    Please select and execute an accounting transaction.
+                </div>
+                <div id="impact-details">
+                    <strong>Accounting Effect:</strong><br>
+                    A simple description of the transaction's effect on the balance sheet will appear here.
+                    <div class="journal-entry">
+                        <strong>Journal Entry:</strong><br>
+                        <div class="entry-line">
+                            <span class="account-name">Dr. <strong>[Debit account]</strong></span>
+                            <span class="amount-value">[Amount]</span>
+                        </div>
+                        <div class="entry-line credit-line">
+                            <span class="account-name">Cr. <strong>[Credit account]</strong></span>
+                            <span class="amount-value">[Amount]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let accounts = {
+            cash: 0, debtors: 0, notes_receivable: 0, inventory: 0, prepaid_expense: 0,
+            equipment: 0, furniture: 0, buildings: 0, land: 0, acc_depreciation: 0, 
+            suppliers: 0, notes_payable: 0, bank_loan: 0, wages_payable: 0, unearned_revenue: 0, 
+            capital: 0, withdrawals: 0, revenue: 0, expenses: 0, rent_expense: 0, interest_revenue: 0
+        };
+        const accountNames = {
+            cash: 'Cash', debtors: 'Customers', notes_receivable: 'Notes Receivable', inventory: 'Inventory', prepaid_expense: 'Prepaid Expenses',
+            equipment: 'Equipment', furniture: 'Furniture', buildings: 'Buildings', land: 'Land', acc_depreciation: 'Accumulated Depreciation',
+            suppliers: 'Suppliers', notes_payable: 'Notes Payable', bank_loan: 'Bank Loans', wages_payable: 'Wages Payable', unearned_revenue: 'Unearned Revenue',
+            capital: 'Capital', withdrawals: 'Withdrawals', revenue: 'Revenue', expenses: 'General Expenses', rent_expense: 'Rent Expense', interest_revenue: 'Interest Revenue'
+        };
+        function calculateTotalAssets() {
+            return accounts.cash + accounts.debtors + accounts.notes_receivable + accounts.inventory + accounts.equipment + accounts.furniture + accounts.prepaid_expense + accounts.buildings + accounts.land - accounts.acc_depreciation;
+        }
+        function calculateTotalLiabilitiesEquity() {
+            return accounts.suppliers + accounts.notes_payable + accounts.bank_loan + accounts.wages_payable + accounts.unearned_revenue + accounts.capital + accounts.revenue + accounts.interest_revenue - accounts.expenses - accounts.rent_expense - accounts.withdrawals;
+        }
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'EGP', minimumFractionDigits: 0}).format(amount);
+        }
+        function updateBalanceBar(assets, liabilitiesEquity) {
+            const balanceStatus = document.getElementById('balance-status');
+            const difference = assets - liabilitiesEquity;
+            if (window.matchMedia("(max-width: 768px)").matches) return; 
+            const leftArm = document.getElementById('left-arm');
+            const rightArm = document.getElementById('right-arm');
+            const maxRotation = 5; 
+            const scaleFactor = 500000; 
+            let rotationDegree = (difference / scaleFactor) * maxRotation;
+            rotationDegree = Math.max(-maxRotation, Math.min(maxRotation, rotationDegree));
+            if (Math.abs(difference) < 1) { 
+                leftArm.style.transform = 'rotate(0deg)';
+                rightArm.style.transform = 'rotate(0deg)';
+                balanceStatus.innerHTML = 'Equation status: <span style="color: #2964ab;"><strong>Balanced</strong></span>';
+                balanceStatus.style.backgroundColor = '#c6dbfa33';
+            } else { 
+                leftArm.style.transform = `rotate(${rotationDegree}deg)`;
+                rightArm.style.transform = `rotate(${-rotationDegree}deg)`;
+                const statusMessage = assets > liabilitiesEquity 
+                    ? `⚠️ <strong>Assets are higher</strong> by: ${formatCurrency(Math.abs(difference))}`
+                    : `⚠️ <strong>Liabilities and Equity are higher</strong> by: ${formatCurrency(Math.abs(difference))}`;
+                balanceStatus.innerHTML = statusMessage;
+                balanceStatus.style.backgroundColor = '#fff0ce';
+            }
+        }
+        function updateUI() {
+            document.getElementById('cash').textContent = formatCurrency(accounts.cash);
+            document.getElementById('debtors').textContent = formatCurrency(accounts.debtors);
+            document.getElementById('notes_receivable').textContent = formatCurrency(accounts.notes_receivable);
+            document.getElementById('inventory').textContent = formatCurrency(accounts.inventory);
+            document.getElementById('prepaid_expense').textContent = formatCurrency(accounts.prepaid_expense);
+            document.getElementById('equipment').textContent = formatCurrency(accounts.equipment);
+            document.getElementById('furniture').textContent = formatCurrency(accounts.furniture); // Furniture
+            document.getElementById('buildings').textContent = formatCurrency(accounts.buildings);
+            document.getElementById('land').textContent = formatCurrency(accounts.land);
+            document.getElementById('acc_depreciation').textContent = formatCurrency(accounts.acc_depreciation);
+            document.getElementById('suppliers').textContent = formatCurrency(accounts.suppliers);
+            document.getElementById('notes_payable').textContent = formatCurrency(accounts.notes_payable);
+            document.getElementById('bank_loan').textContent = formatCurrency(accounts.bank_loan);
+            document.getElementById('wages_payable').textContent = formatCurrency(accounts.wages_payable);
+            document.getElementById('unearned_revenue').textContent = formatCurrency(accounts.unearned_revenue);
+            document.getElementById('capital').textContent = formatCurrency(accounts.capital);
+            document.getElementById('withdrawals').textContent = formatCurrency(accounts.withdrawals);
+            document.getElementById('revenue').textContent = formatCurrency(accounts.revenue);
+            document.getElementById('interest_revenue').textContent = formatCurrency(accounts.interest_revenue);
+            document.getElementById('expenses').textContent = formatCurrency(accounts.expenses);
+            document.getElementById('rent_expense').textContent = formatCurrency(accounts.rent_expense);
+            const totalAssets = calculateTotalAssets();
+            const totalLiabilitiesEquity = calculateTotalLiabilitiesEquity();
+            document.getElementById('total-assets').textContent = formatCurrency(totalAssets);
+            document.getElementById('total-liabilities-equity').textContent = formatCurrency(totalLiabilitiesEquity);
+            updateBalanceBar(totalAssets, totalLiabilitiesEquity);
+        }
+        function updateTransactionOptions() {
+            const type = document.getElementById('transaction-type').value;
+            const dynamicOptionsDiv = document.getElementById('dynamic-options');
+            dynamicOptionsDiv.innerHTML = '';
+            let optionsHTML = '';
+            if (['buy_asset', 'buy_furniture', 'buy_inventory', 'provide_service', 'pay_expense'].includes(type)) {
+                let selectLabel = '-- Select method --';
+                if (['pay_expense'].includes(type)) selectLabel = '-- Select payment method (cash/accrued) --';
+                else selectLabel = '-- Select payment method (cash/credit) --';
+                optionsHTML = `
+                    <select id="payment-method">
+                        <option value="">${selectLabel}</option>
+                        <option value="cash">Cash</option>
+                        <option value="credit">Credit / Accrued</option>
+                    </select>
+                `;
+            }
+            if (optionsHTML) dynamicOptionsDiv.innerHTML = optionsHTML;
+        }
+        const generateJournalEntry = (debitAcc, creditAcc, amount) => {
+            const formattedAmount = formatCurrency(amount);
+            return `
+                <div class="journal-entry">
+                    <strong>Journal Entry:</strong>
+                    <div class="entry-line">
+                        <span class="account-name">Dr. <strong>${accountNames[debitAcc]}</strong></span>
+                        <span class="amount-value">${formattedAmount}</span>
+                    </div>
+                    <div class="entry-line credit-line">
+                        <span class="account-name">Cr. <strong>${accountNames[creditAcc]}</strong></span>
+                        <span class="amount-value">${formattedAmount}</span>
+                    </div>
+                </div>
+            `;
+        };
+        function addTransaction() {
+            const transactionType = document.getElementById('transaction-type').value;
+            const amountInput = document.getElementById('amount').value;
+            const amount = parseInt(amountInput);
+            let paymentMethodSelect = document.getElementById('payment-method');
+            let paymentMethod = paymentMethodSelect ? paymentMethodSelect.value : null;
+            let resultHeader = '';
+            let impactDetail = '';
+            let journalEntry = '';
+            let isError = false;
+            if (!transactionType) { alert('Please select a transaction type.'); return; }
+            if (isNaN(amount) || amount <= 0) { alert('Please enter a valid positive amount.'); return; }
+            if (['buy_asset', 'buy_furniture', 'buy_inventory', 'provide_service', 'pay_expense'].includes(transactionType) && !paymentMethod) {
+                alert('Please select a payment method (cash or credit/accrued).');
+                return;
+            }
+            switch (transactionType) {
+                case 'capital_injection':
+                    accounts.cash += amount;
+                    accounts.capital += amount;
+                    resultHeader = '💰 Capital injection';
+                    impactDetail = `<strong>Assets (cash)</strong> increased and <strong>Equity (capital)</strong> increased by the same amount.`;
+                    journalEntry = generateJournalEntry('cash', 'capital', amount);
+                    break;
+                case 'buy_asset':
+                    if (paymentMethod === 'cash') {
+                        if (accounts.cash < amount) { isError = true; impactDetail = 'Insufficient cash balance to complete the purchase.'; break; }
+                        accounts.cash -= amount;
+                        accounts.equipment += amount; 
+                        resultHeader = '🛠️ Buy equipment (cash)';
+                        impactDetail = `<strong>Assets (cash)</strong> decreased and <strong>Assets (equipment)</strong> increased by the same amount.`;
+                        journalEntry = generateJournalEntry('equipment', 'cash', amount);
+                    } else if (paymentMethod === 'credit') {
+                        accounts.suppliers += amount;
+                        accounts.equipment += amount;
+                        resultHeader = '🛠️ Buy equipment (credit)';
+                        impactDetail = `<strong>Liabilities (suppliers)</strong> increased and <strong>Assets (equipment)</strong> increased by the same amount.`;
+                        journalEntry = generateJournalEntry('equipment', 'suppliers', amount);
+                    }
+                    break;
+                case 'buy_furniture':
+                    if (paymentMethod === 'cash') {
+                        if (accounts.cash < amount) { isError = true; impactDetail = 'Insufficient cash balance to buy the furniture.'; break; }
+                        accounts.cash -= amount;
+                        accounts.furniture += amount;
+                        resultHeader = '🛋️ Buy furniture (cash)';
+                        impactDetail = `<strong>Assets (cash)</strong> decreased and <strong>Assets (furniture)</strong> increased by the same amount.`;
+                        journalEntry = generateJournalEntry('furniture', 'cash', amount);
+                    } else if (paymentMethod === 'credit') {
+                        accounts.suppliers += amount;
+                        accounts.furniture += amount;
+                        resultHeader = '🛋️ Buy furniture (credit)';
+                        impactDetail = `<strong>Liabilities (suppliers)</strong> increased and <strong>Assets (furniture)</strong> increased by the same amount.`;
+                        journalEntry = generateJournalEntry('furniture', 'suppliers', amount);
+                    }
+                    break;
+                case 'buy_inventory':
+                    if (paymentMethod === 'cash') {
+                        if (accounts.cash < amount) { isError = true; impactDetail = 'Insufficient cash balance to buy the inventory.'; break; }
+                        accounts.cash -= amount;
+                        accounts.inventory += amount;
+                        resultHeader = '📦 Buy inventory (cash)';
+                        impactDetail = `<strong>Assets (cash)</strong> decreased and <strong>Assets (inventory)</strong> increased by the same amount.`;
+                        journalEntry = generateJournalEntry('inventory', 'cash', amount);
+                    } else if (paymentMethod === 'credit') {
+                        accounts.suppliers += amount;
+                        accounts.inventory += amount;
+                        resultHeader = '📦 Buy inventory (credit)';
+                        impactDetail = `<strong>Liabilities (suppliers)</strong> increased and <strong>Assets (inventory)</strong> increased by the same amount.`;
+                        journalEntry = generateJournalEntry('inventory', 'suppliers', amount);
+                    }
+                    break;
+                case 'reduce_capital':
+                    if (accounts.capital < amount) { isError = true; impactDetail = 'Capital is less than the reduction amount.'; break; }
+                    accounts.capital -= amount;
+                    accounts.cash -= amount;
+                    resultHeader = '🔻 Reduce capital';
+                    impactDetail = 'Capital was reduced and Assets (cash) decreased by the same amount.';
+                    journalEntry = generateJournalEntry('capital', 'cash', amount);
+                    break;
+                case 'provide_service':
+                    if (paymentMethod === 'cash') {
+                        accounts.cash += amount;
+                        accounts.revenue += amount;
+                        resultHeader = '📈 Provide service (cash)';
+                        impactDetail = `<strong>Assets (cash)</strong> increased and <strong>Revenue</strong> increased.`;
+                        journalEntry = generateJournalEntry('cash', 'revenue', amount);
+                    } else if (paymentMethod === 'credit') {
+                        accounts.debtors += amount;
+                        accounts.revenue += amount;
+                        resultHeader = '💵 Provide service (credit, owed by customers)';
+                        impactDetail = `<strong>Assets (customers)</strong> increased and <strong>Revenue</strong> increased.`;
+                        journalEntry = generateJournalEntry('debtors', 'revenue', amount);
+                    }
+                    break;
+                case 'pay_expense':
+                    if (paymentMethod === 'cash') {
+                        if (accounts.cash < amount) { isError = true; impactDetail = 'Insufficient cash balance to pay the expense.'; break; }
+                        accounts.cash -= amount;
+                        accounts.rent_expense += amount; 
+                        resultHeader = '🏠 Pay rent expense (cash)';
+                        impactDetail = `<strong>Assets (cash)</strong> decreased and <strong>Rent expense</strong> increased which reduces <strong>Equity</strong>.`;
+                        journalEntry = generateJournalEntry('rent_expense', 'cash', amount);
+                    } else if (paymentMethod === 'credit') {
+                        accounts.wages_payable += amount;
+                        accounts.rent_expense += amount;
+                        resultHeader = '📝 Record accrued rent expense';
+                        impactDetail = `<strong>Liabilities (wages payable)</strong> increased and <strong>Rent expense</strong> increased.`;
+                        journalEntry = generateJournalEntry('rent_expense', 'wages_payable', amount); 
+                    }
+                    break;
+                case 'purchase_land_bankloan':
+                    accounts.land += amount;
+                    accounts.bank_loan += amount;
+                    resultHeader = '🗺️ Buy land with a bank loan';
+                    impactDetail = `<strong>Assets (land)</strong> increased and <strong>Liabilities (bank loans)</strong> increased.`;
+                    journalEntry = generateJournalEntry('land', 'bank_loan', amount);
+                    break;
+                case 'receive_cash_unearned':
+                    accounts.cash += amount;
+                    accounts.unearned_revenue += amount;
+                    resultHeader = '💸 Receive cash for a future service (unearned revenue)';
+                    impactDetail = `<strong>Assets (cash)</strong> increased and <strong>Liabilities (unearned revenue)</strong> increased.`;
+                    journalEntry = generateJournalEntry('cash', 'unearned_revenue', amount);
+                    break;
+                case 'issue_note_payable':
+                    if (accounts.suppliers < amount) { isError = true; impactDetail = 'The note payable amount is greater than the current suppliers balance.'; break; }
+                    accounts.suppliers -= amount;
+                    accounts.notes_payable += amount;
+                    resultHeader = '📜 Issue a note payable to suppliers (debt swap)';
+                    impactDetail = `<strong>Liabilities (suppliers)</strong> decreased and <strong>Liabilities (notes payable)</strong> increased.`;
+                    journalEntry = generateJournalEntry('suppliers', 'notes_payable', amount);
+                    break;
+                case 'owner_withdrawal':
+                    if (accounts.cash < amount) { isError = true; impactDetail = 'Insufficient cash balance for the withdrawal.'; break; }
+                    accounts.cash -= amount;
+                    accounts.withdrawals += amount;
+                    resultHeader = '➖ Owner personal withdrawals';
+                    impactDetail = `<strong>Assets (cash)</strong> decreased and <strong>Personal withdrawals</strong> increased.`;
+                    journalEntry = generateJournalEntry('withdrawals', 'cash', amount);
+                    break;
+                case 'collect_debt':
+                    if (accounts.debtors < amount) { isError = true; impactDetail = 'The collection amount is greater than the current customers balance.'; break; }
+                    accounts.cash += amount;
+                    accounts.debtors -= amount;
+                    resultHeader = '🤝 Collect from customers (settlement)';
+                    impactDetail = `<strong>Assets (cash)</strong> increased and <strong>Assets (customers)</strong> decreased.`;
+                    journalEntry = generateJournalEntry('cash', 'debtors', amount);
+                    break;
+                case 'pay_supplier':
+                    if (accounts.cash < amount) { isError = true; impactDetail = 'Insufficient cash balance to pay the suppliers.'; break; }
+                    if (accounts.suppliers < amount) { isError = true; impactDetail = 'The payment amount is greater than the current suppliers balance.'; break; }
+                    accounts.cash -= amount;
+                    accounts.suppliers -= amount;
+                    resultHeader = '📉 Pay suppliers (settlement)';
+                    impactDetail = `<strong>Assets (cash)</strong> decreased and <strong>Liabilities (suppliers)</strong> decreased.`;
+                    journalEntry = generateJournalEntry('suppliers', 'cash', amount);
+                    break;
+                case 'record_depreciation':
+                    accounts.acc_depreciation += amount;
+                    accounts.expenses += amount; 
+                    resultHeader = '🔨 Record depreciation expense (adjustment)';
+                    impactDetail = `<strong>General expenses</strong> increased and <strong>Accumulated depreciation</strong> increased.`;
+                    journalEntry = generateJournalEntry('expenses', 'acc_depreciation', amount);
+                    break;
+                default:
+                    resultHeader = 'Unknown transaction';
+                    impactDetail = 'Please select a valid transaction.';
+            }
+            const resultDiv = document.getElementById('result-message');
+            const impactDiv = document.getElementById('impact-details');
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+            if (isError) {
+                resultDiv.innerHTML = `<strong>🚫 Transaction failed!</strong>`;
+                impactDiv.innerHTML = `<strong>Reason:</strong> ${impactDetail}
+                    <div class="journal-entry" style="background-color: #f7f9fc; border-color: #ddd;">
+                        <strong>Journal Entry:</strong>
+                        <div class="entry-line">
+                            <span style="color: #ce3054;">No entry was recorded because of the failure.</span>
+                        </div>
+                    </div>`;
+                resultDiv.style.backgroundColor = '#efebf9'; 
+                resultDiv.style.color = '#ce3054'; 
+                if (isMobile) {
+                    resultDiv.style.borderBottom = '3px solid #ce3054';
+                    resultDiv.style.borderRight = 'none';
+                } else {
+                    resultDiv.style.borderRight = '5px solid #ce3054'; 
+                    resultDiv.style.borderBottom = 'none';
+                }
+            } else {
+                resultDiv.innerHTML = `<strong>✅ Success:</strong><br>${resultHeader}`;
+                impactDiv.innerHTML = `<strong>Accounting Effect:</strong> ${impactDetail} ${journalEntry}`;
+                resultDiv.style.backgroundColor = '#ffeaf6'; 
+                resultDiv.style.color = '#e14d91'; 
+                if (isMobile) {
+                    resultDiv.style.borderBottom = '3px solid #e14d91';
+                    resultDiv.style.borderRight = 'none';
+                } else {
+                    resultDiv.style.borderRight = '5px solid #e14d91'; 
+                    resultDiv.style.borderBottom = 'none';
+                }
+            }
+            document.getElementById('amount').value = '';
+            updateTransactionOptions(); 
+            updateUI();
+        }
+
+        // Mini numeric keypad
+        function createNumericKeyboard() {
+            const keys = [
+                '1', '2', '3',
+                '4', '5', '6',
+                '7', '8', '9',
+                'C', '0', '←'
+            ];
+            const container = document.getElementById('numeric-keyboard');
+            container.innerHTML = '';
+            keys.forEach(key => {
+                const btn = document.createElement('button');
+                btn.textContent = key;
+                btn.onclick = () => handleKeyPress(key);
+                container.appendChild(btn);
+            });
+        }
+        function handleKeyPress(key) {
+            const input = document.getElementById('amount');
+            if (key === 'C') {
+                input.value = '';
+            } else if (key === '←') {
+                input.value = input.value.slice(0, -1);
+            } else {
+                input.value += key;
+            }
+            input.focus();
+        }
+        function showNumericKeyboard() {
+            createNumericKeyboard();
+            document.getElementById('numeric-keyboard').style.display = 'grid';
+        }
+        document.addEventListener('mousedown', function(event) {
+            const kb = document.getElementById('numeric-keyboard');
+            const input = document.getElementById('amount');
+            if (!kb.contains(event.target) && event.target !== input) {
+                kb.style.display = 'none';
+            }
+        });
+
+        window.onload = function() {
+            updateUI();
+            updateTransactionOptions();
+        };
+    </script>
+</body>
+</html>
